@@ -28,21 +28,14 @@ const Login = props => {
         return false;
       }
       const data = { email, password };
-      console.log(data);
       const resp = await axios.post(
         "http://localhost:7000/api/user/login",
         data
       );
       const Token = resp.data.token;
-      if (Token) {
-        const token = localStorage.setItem("login", JSON.stringify(resp.token));
-      } else {
-        setError("Inavalid Details");
-        return false;
-      }
+      const token = localStorage.setItem("login", JSON.stringify(resp.data.token));
       const response = await axios.get("http://localhost:7000/api/alltweet");
       if (response) {
-        console.log("ss", response);
         history.push({
           pathname: "/home",
           state: { detail: response.data.data },
@@ -50,7 +43,9 @@ const Login = props => {
         return true;
       }
     } catch (err) {
-      setError(true);
+      setError("Inavalid Details");
+      console.log("sss")
+     
     }
   };
   return (
