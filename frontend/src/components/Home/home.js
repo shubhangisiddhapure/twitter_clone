@@ -42,7 +42,10 @@ const Home = (props) => {
                     <div className="data">
                       <b>{tweet.user.fullname}</b>
                     </div>
-                    <div className="data">{tweet.user.username}</div>
+                    <div className="data">
+
+                      {tweet.user.username}
+                    </div>
                     <Card.Body>
                       <div>
                         <h5>tweet</h5>
@@ -52,6 +55,7 @@ const Home = (props) => {
                   </div>
                   <div className="col d-flex">
                     <div className="rowdata">
+                      <h5>likes</h5>
                       {tweet.likesCount}
                     </div>
                     <div className="rowdata">
