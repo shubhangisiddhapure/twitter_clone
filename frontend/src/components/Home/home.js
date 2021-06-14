@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Card } from "react-bootstrap";
+import Like from "./Like"
+
+
 import NavBar from "../../container/navbar";
 import Tweetbox from "../../container/tweetbox";
 import { Avatar } from "@material-ui/core";
@@ -27,7 +30,7 @@ const Home = (props) => {
             return (
               <div>
                 <Card
-                  className="shadow p-3 mb-5 bg-white rounded"
+                  className="shadow p-3 mb-2 bg-white rounded"
                   style={{
                     width: "50%",
                     marginRight: "auto",
@@ -42,9 +45,8 @@ const Home = (props) => {
                     <div className="data">
                       <b>{tweet.user.fullname}</b>
                     </div>
-                    <div className="data">
-
-                      {tweet.user.username}
+                    <div>
+                      @{tweet.user.username}
                     </div>
                     <Card.Body>
                       <div>
@@ -55,8 +57,7 @@ const Home = (props) => {
                   </div>
                   <div className="col d-flex">
                     <div className="rowdata">
-                      <h5>likes</h5>
-                      {tweet.likesCount}
+                      <Like/>{tweet.likesCount}
                     </div>
                     <div className="rowdata">
                       <h5>Comment</h5>

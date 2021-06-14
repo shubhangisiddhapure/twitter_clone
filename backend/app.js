@@ -22,7 +22,6 @@ connectDB();
 const user = require("./src/route/auth.js");
 app.use("/api/user", user);
 const tweet = require("./src/route/post.js");
-
 app.use("/api", tweet);
 // listen for requests
 app.listen(7000, () => {

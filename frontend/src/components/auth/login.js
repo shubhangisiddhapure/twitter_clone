@@ -36,7 +36,7 @@ const Login = props => {
       );
       const Token = resp.data.token;
       if (Token) {
-        const token = localStorage.setItem("login", JSON.stringify(resp.data.token));
+        const token = localStorage.setItem("login", resp.data.token);
       } 
       const response = await axios.get("http://localhost:7000/api/alltweet");
       if (response) {
