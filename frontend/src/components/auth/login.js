@@ -16,10 +16,7 @@ const Login = props => {
         setError("Please fill all the fields");
         return false;
       }
-      if (password.length < 5) {
-        setError("password must be atleast 6 character long");
-        return false;
-      }
+      
       var pattern = new RegExp(
         /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
       );
@@ -27,6 +24,11 @@ const Login = props => {
         setError("Please enter a valid email id");
         return false;
       }
+      if (password.length < 5) {
+        setError("password must be atleast 6 character long");
+        return false;
+      }
+      
       const data = { email, password };
       console.log(data);
       const resp = await axios.post(
@@ -36,10 +38,7 @@ const Login = props => {
       const Token = resp.data.token;
       if (Token) {
         const token = localStorage.setItem("login", JSON.stringify(resp.token));
-      } else {
-        setError("Inavalid Details");
-        return false;
-      }
+      } 
       const response = await axios.get("http://localhost:7000/api/alltweet");
       if (response) {
         console.log("ss", response);
@@ -50,7 +49,8 @@ const Login = props => {
         return true;
       }
     } catch (err) {
-      setError(true);
+      setError("Inavalid Details");
+      return false
     }
   };
   return (

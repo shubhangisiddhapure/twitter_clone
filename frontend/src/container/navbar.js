@@ -4,7 +4,7 @@ import React from "react";
 import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 const NavBar = () => {
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar style={{backgroundColor:"#50b7f5"}}>
       <Nav className="mr-auto">
         <Nav.Link href="/profile">My Profile</Nav.Link>
       </Nav>
