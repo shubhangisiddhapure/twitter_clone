@@ -35,13 +35,9 @@ const Login = props => {
         data
       );
       const Token = resp.data.token;
-<<<<<<< HEAD
       if (Token) {
-        const token = localStorage.setItem("login", JSON.stringify(resp.token));
+        const token = localStorage.setItem("login", JSON.stringify(resp.data.token));
       } 
-=======
-      const token = localStorage.setItem("login", JSON.stringify(resp.data.token));
->>>>>>> origin
       const response = await axios.get("http://localhost:7000/api/alltweet");
       if (response) {
         history.push({
@@ -52,12 +48,7 @@ const Login = props => {
       }
     } catch (err) {
       setError("Inavalid Details");
-<<<<<<< HEAD
       return false
-=======
-      console.log("sss")
-     
->>>>>>> origin
     }
   };
   return (

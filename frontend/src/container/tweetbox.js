@@ -11,19 +11,8 @@ function TweetBox() {
    
 
     const sendTweet = async(e) => {
-        e.preventDefault();
-
-        // db.collection('posts').add({
-        //     displayName : "CodeWithAkky",
-        //     username: "akky_im",
-        //     verified: true,
-        //     text: tweetMessage,
-        //     image: tweetImage,
-        //     avatar: "https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-        // })
-
-
-        setTweetMessage("")
+        e.preventDefault()
+         setTweetMessage("")
     
     }
 
@@ -54,4 +43,4 @@ function TweetBox() {
     )
 }
 
-export default TweetBox
+export default TweetBox;
