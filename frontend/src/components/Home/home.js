@@ -25,7 +25,7 @@ const Home = props => {
             return (
               <Card
                 className="shadow p-3 mb-5 bg-white rounded"
-                style={{ width: "50%" }}
+                style={{ width: "50%" ,marginRight:"auto",marginLeft:"auto"}}
               >
                 <Card.Body>
                   <div>
