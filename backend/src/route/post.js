@@ -37,16 +37,18 @@ router.post(
 //get all tweet
 router.get("/alltweet", async (req, res) => {
   try {
+
     const tweets = await Tweet.find().sort("-createdAt").populate({
       path: "user",
       select: "username avatar fullname",
     });
+    
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "Tweets not found" });
     }
     res.status(200).json({ msg: "All tweets", data: tweets });
   } catch (err) {
-    consol.log(err);
+    console.log(err);
     res.status(500).send("sever error");
   }
 });

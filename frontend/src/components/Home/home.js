@@ -17,15 +17,28 @@ const Home = props => {
   return (
     <div>
       <NavBar></NavBar>
+<<<<<<< HEAD
       <div >.
         <Tweetbox />
+=======
+      <div>
+>>>>>>> origin
         {tweets &&
           tweets.map((tweet, index) => {
             console.log(tweet.likes);
             return (
               <Card
+<<<<<<< HEAD
                 className="shadow p-3 mb-5 bg-white rounded"
                 style={{ width: "50%" ,marginRight:"auto",marginLeft:"auto"}}
+=======
+                className="shadow p-3 mb-5 bg-white rounded justify-content-center"
+                style={{
+                  width: "50%",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+>>>>>>> origin
               >
                 <Card.Body>
                   <div>

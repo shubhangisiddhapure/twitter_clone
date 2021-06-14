@@ -30,18 +30,20 @@ const Login = props => {
       }
       
       const data = { email, password };
-      console.log(data);
       const resp = await axios.post(
         "http://localhost:7000/api/user/login",
         data
       );
       const Token = resp.data.token;
+<<<<<<< HEAD
       if (Token) {
         const token = localStorage.setItem("login", JSON.stringify(resp.token));
       } 
+=======
+      const token = localStorage.setItem("login", JSON.stringify(resp.data.token));
+>>>>>>> origin
       const response = await axios.get("http://localhost:7000/api/alltweet");
       if (response) {
-        console.log("ss", response);
         history.push({
           pathname: "/home",
           state: { detail: response.data.data },
@@ -50,7 +52,12 @@ const Login = props => {
       }
     } catch (err) {
       setError("Inavalid Details");
+<<<<<<< HEAD
       return false
+=======
+      console.log("sss")
+     
+>>>>>>> origin
     }
   };
   return (
