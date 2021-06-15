@@ -33,7 +33,7 @@ router.get("/allusers", async (req, res) => {
     res.status(500).send("sever error");
   }
 });
-router.get(
+router.post(
   "/userprofile",
   [check("username", "please enter username").exists()],
   async (req, res) => {

@@ -11,7 +11,7 @@ const NavBar = () => {
   useEffect(() => {
     const loadUsers = async () => {
       const response = await axios.get(
-        "http://localhost:7000/api/user/allusers"
+        "http://localhost:7000/api/allusers"
       );
       setUsers(response.data.data);
     };
@@ -23,9 +23,9 @@ const NavBar = () => {
     setSuggestions([]);
     const data = text;
     console.log(data);
-    const profile = await axios.get(
-      "http://localhost:7000/api/user/userprofile",
-      { data }
+    const profile = await axios.post(
+      "http://localhost:7000/api/userprofile",
+      { username:data }
     );
     console.log(profile);
   };
