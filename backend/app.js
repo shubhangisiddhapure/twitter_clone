@@ -23,6 +23,8 @@ const user = require("./src/route/auth.js");
 app.use("/api/user", user);
 const tweet = require("./src/route/post.js");
 app.use("/api", tweet);
+const comment = require("./src/route/user.js");
+app.use("/api", comment);
 // listen for requests
 app.listen(7000, () => {
   console.log("Server is listening on port 7000");

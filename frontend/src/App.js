@@ -5,6 +5,8 @@ import "./App.css";
 import Login from "./components/auth/login";
 import Home from "./components/Home/home";
 import Signup from "./components/auth/signup";
+import Comment from "./components/Home/comment";
+import Profile from "./components/Home/Profile"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -20,6 +22,12 @@ function App() {
           </Route>
           <Route exact path="/signup">
             <Signup />
+          </Route>
+          <Route exact path="/comment">
+            <Comment />
+          </Route>
+          <Route exact path="/profile">
+            <Profile />
           </Route>
         </Switch>
       </Router>
