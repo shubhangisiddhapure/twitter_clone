@@ -20,12 +20,12 @@ const Comment = (props) => {
     setid(tweetid);
     settweet(tweetdata);
   }, [location]);
-  console.log(tweet);
+  console.log(tweetid);
   const openComment = async () => {
     try {
       seterror(false);
       const resp = await axios.put(
-        "http://localhost:7000/api//tweet/replaytweet",
+        "http://localhost:7000/api/tweet/replaytweet",
         { tweetid, text },
         {
           headers: {

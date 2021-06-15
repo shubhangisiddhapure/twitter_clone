@@ -53,12 +53,13 @@ router.get("/alltweet", async (req, res) => {
   }
 });
 //like or unlike to tweet
-router.put("/tweet/:tweet_id/toggleLike", auth, async (req, res) => {
+router.put("/tweet/toggleLike", auth, async (req, res) => {
   try {
-    const tweet = await Tweet.findById(req.params.tweet_id);
+    const tweet = await Tweet.findById(req.body._id);
     if (!tweet) {
       return res.status(404).json({ msg: "Tweet Not found" });
     }
+  
     if (tweet.likes.includes(req.user.id)) {
       const index = tweet.likes.indexOf(req.user.id);
       tweet.likes.splice(index);
@@ -71,14 +72,14 @@ router.put("/tweet/:tweet_id/toggleLike", auth, async (req, res) => {
     }
     res.status(200).json({ msg: "Tweet", data: tweet });
   } catch (err) {
-    consol.log(err);
+    
     res.status(500).send("sever error");
   }
 });
 
 //replay to tweet or comment on tweet
 router.put(
-  "/tweet/:tweet_id/replaytweet",
+  "/tweet/replaytweet",
   [auth, [check("text", "Text is required").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
@@ -86,14 +87,14 @@ router.put(
       res.status(400).json({ errors: errors });
     }
     try {
-      const tweet = await Tweet.findById(req.params.tweet_id);
+      const tweet = await Tweet.findById(req.body.tweetid);
 
       if (!tweet) {
         return res.status(404).json({ msg: "Tweet Not found" });
       }
       const newComment = new Comment({
         user: req.user.id,
-        tweet: req.params.tweet_id,
+        tweet: req.body.tweetid,
         text: req.body.text,
       });
       const comment = await newComment.save();
