@@ -1,16 +1,28 @@
 /** @format */
+
 import axios from "axios";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
+var jwt = require("jsonwebtoken");
 const Like = (props) => {
   const like = props.data.likesCount;
+  const likeduserid = props.data.likes;
+  console.log(likeduserid);
+  const token = localStorage.getItem("login")
+  var decode1 = jwt.decode(token);
+  const loggeduserId=decode1.user.id;
   const islike = localStorage.getItem("sucess");
   const _id = props.data._id;
-  const [sucess, setsuccess] = useState("");
+  const [sucess, setsuccess] = useState();
   const [likesState, setLikes] = useState(like);
+  const lengthlist = likeduserid.filter(id => id === loggeduserId);
+  console.log(lengthlist);
+
   const toggleLike = async () => {
-    if (!sucess) {
+   (likeduserid.pop(loggeduserId)) 
+    console.log(likeduserid.length);
+    if (sucess===false) {
       const resp = await axios.put(
         "http://localhost:7000/api/tweet/toggleLike",
         { _id },
@@ -22,7 +34,8 @@ const Like = (props) => {
       );
       console.log(resp);
       setLikes(likesState + 1);
-      setsuccess(true);
+       setsuccess(true);
+      
     } else {
       const resp = await axios.put(
         "http://localhost:7000/api/tweet/toggleLike",
@@ -41,11 +54,15 @@ const Like = (props) => {
 
   return (
     <div>
-      {sucess ? (
-        <LikeButton style={{ color: "red" }} onClick={(e) => toggleLike()} />
+      {lengthlist.length > 0 || sucess ? (
+        <LikeButton
+          style={{ color: "red" }}
+          onClick={(e) => toggleLike()}
+        />
       ) : (
         <LikeButton onClick={(e) => toggleLike()}> </LikeButton>
       )}
+
       {likesState}
     </div>
   );
