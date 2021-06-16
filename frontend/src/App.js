@@ -7,6 +7,7 @@ import Home from "./components/Home/home";
 import Signup from "./components/auth/signup";
 import Comment from "./components/Home/comment";
 import Profile from "./components/Home/Profile"
+import Userprofile from "./components/Home/useprofile"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
           </Route>
           <Route exact path="/profile">
             <Profile />
+          </Route>
+          <Route exact path="/userprofile">
+            <Userprofile />
           </Route>
         </Switch>
       </Router>

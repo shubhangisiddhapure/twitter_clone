@@ -107,4 +107,21 @@ router.put(
     }
   }
 );
+//get all comment of particuler tweer
+router.get("/comment/:tweet_id", async (req, res) => {
+  try {
+    const tweet = req.params.tweet_id;
+    const comments = await Comment.find({tweet})
+      .sort("-createdAt")
+      .populate("user");
+
+    if (comments.length === 0) {
+      return res.status(404).json({ msg: "comments not found" });
+    }
+    res.status(200).json({ msg: "All comments", data: comments });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("sever error");
+  }
+});
 module.exports = router;

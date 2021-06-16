@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Link, useHistory, withRouter } from "react-router-dom";
 import axios from "axios";
 const NavBar = () => {
+  const history = useHistory();
   const [users, setUsers] = useState([]);
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -28,6 +30,14 @@ const NavBar = () => {
       { username:data }
     );
     console.log(profile);
+    if (profile) {
+      console.log(profile.data.data);
+      history.push({
+        pathname: "/userprofile",
+        state: { data: profile.data.data },
+      });
+      return true;
+    }
   };
   const onChangeHandler = (text) => {
     let matches = [];
