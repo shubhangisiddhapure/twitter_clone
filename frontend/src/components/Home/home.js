@@ -27,7 +27,7 @@ const Home = (props) => {
         {tweets &&
           tweets.map((tweet, index) => {
             console.log(tweet)
-            const userid = localStorage.getItem("id");
+            // const userid = localStorage.getItem("id");
             const createdAt = new Date(tweet.createdAt).toLocaleDateString(
               "en-GB",
               {
@@ -35,10 +35,10 @@ const Home = (props) => {
                 month: "short",
               }
             );
-            if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
-              const success = true;
-              localStorage.setItem("sucess", success);
-            }
+            // if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
+            //   const success = true;
+            //   localStorage.setItem("sucess", success);
+            // }
             return (
               <div >
                 <Card

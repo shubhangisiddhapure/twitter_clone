@@ -38,10 +38,7 @@ router.post(
 router.get("/alltweet", async (req, res) => {
   try {
 
-    const tweets = await Tweet.find().sort("-createdAt").populate({
-      path: "user",
-      select: "username avatar fullname",
-    });
+    const tweets = await Tweet.find().sort("-createdAt").populate("user");
     
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "Tweets not found" });
@@ -102,10 +99,7 @@ router.put(
       tweet.replaytotweetCount = tweet.replaytotweetCount + 1;
       await tweet.save();
 
-      let comments = await comment.populate({
-        path: "user",
-        select: "avatar username fullname",
-      });
+      let comments = await comment.populate("user");
       res.status(200).json({ success: true, data: comments });
     } catch (err) {
       console.log(err);

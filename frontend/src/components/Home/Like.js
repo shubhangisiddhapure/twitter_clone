@@ -7,7 +7,7 @@ const Like = (props) => {
   const like = props.data.likesCount;
   const islike = localStorage.getItem("sucess");
   const _id = props.data._id;
-  const [sucess, setsuccess] = useState(like);
+  const [sucess, setsuccess] = useState("");
   const [likesState, setLikes] = useState(like);
   const toggleLike = async () => {
     if (!sucess) {
