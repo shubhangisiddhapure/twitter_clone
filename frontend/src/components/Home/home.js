@@ -6,7 +6,7 @@ import Like from "./Like";
 import { useLocation } from "react-router-dom";
 import Comment from "../../container/commentbox"
 import axios from "axios";
-import NavBar from "../../container/navbar";
+import NavBar from "../../container/searchbar";
 import Tweetbox from "../../container/tweetbox";
 import { Avatar } from "@material-ui/core";
 import "./home.css";

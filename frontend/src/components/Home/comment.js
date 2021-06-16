@@ -2,10 +2,11 @@
 import "../../container/tweetbox.css";
 import axios from "axios";
 import Like from "./Like";
+import Navbar from "../../container/Navbars";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
 import { useHistory, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Form, FormControl, Card } from "react-bootstrap";
+import {  Card } from "react-bootstrap";
 import { Avatar, Button } from "@material-ui/core";
 const Comment = (props) => {
   const history = useHistory();
@@ -45,11 +46,7 @@ const Comment = (props) => {
 
   return (
     <div>
-      <Navbar style={{ backgroundColor: "#50b7f5" }}>
-        <Nav className="ml-auto">
-          <Nav.Link href="/Home">Go Back</Nav.Link>
-        </Nav>
-      </Navbar>
+      <Navbar></Navbar>
       <br></br>
       {tweet && (
         <Card

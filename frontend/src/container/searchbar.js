@@ -43,7 +43,7 @@ const NavBar = () => {
   };
   return (
     <div>
-      <Navbar style={{ backgroundColor: "#50B7F5" }}>
+      <Navbar style={{ backgroundColor: "#50B7F5"}}>
         <Nav className="mr-auto">
           <Nav.Link href="/profile">My Profile</Nav.Link>
         </Nav>
