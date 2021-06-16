@@ -1,4 +1,5 @@
 /** @format */
+const mongoose = require("mongoose");
 
 const express = require("express");
 const router = express.Router();
@@ -108,9 +109,10 @@ router.put(
   }
 );
 //get all comment of particuler tweer
-router.get("/comment/:tweet_id", async (req, res) => {
+router.post("/comment",async (req, res) => {
   try {
-    const tweet = req.params.tweet_id;
+    const tweet = req.body.id;
+    console.log(tweet);
     const comments = await Comment.find({tweet})
       .sort("-createdAt")
       .populate("user");

@@ -3,10 +3,11 @@ import "../../container/tweetbox.css";
 import axios from "axios";
 import Like from "./Like";
 import Navbar from "../../container/Navbars";
+import Postcomment from "./postcomment";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import {  Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Avatar, Button } from "@material-ui/core";
 const Comment = (props) => {
   const history = useHistory();
@@ -21,7 +22,8 @@ const Comment = (props) => {
     setid(tweetid);
     settweet(tweetdata);
   }, [location]);
-  console.log(tweetid);
+  // console.log(tweetid);
+  const tweetids = tweetid;
   const openComment = async () => {
     try {
       seterror(false);
@@ -88,6 +90,7 @@ const Comment = (props) => {
           </div>
         </Card>
       )}
+      <Postcomment></Postcomment>
       <Card style={{ width: "50%", marginRight: "auto", marginLeft: "auto" }}>
         <div className="tweetBox">
           <form>

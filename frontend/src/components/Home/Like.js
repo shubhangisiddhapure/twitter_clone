@@ -17,12 +17,12 @@ const Like = (props) => {
   const [sucess, setsuccess] = useState();
   const [likesState, setLikes] = useState(like);
   const lengthlist = likeduserid.filter(id => id === loggeduserId);
-  console.log(lengthlist);
 
   const toggleLike = async () => {
-   (likeduserid.pop(loggeduserId)) 
-    console.log(likeduserid.length);
-    if (sucess===false) {
+  //  (likeduserid.pop(loggeduserId)) 
+  //   console.log(likeduserid.length);
+    if (!sucess) {
+      
       const resp = await axios.put(
         "http://localhost:7000/api/tweet/toggleLike",
         { _id },
@@ -34,8 +34,8 @@ const Like = (props) => {
       );
       console.log(resp);
       setLikes(likesState + 1);
-       setsuccess(true);
       
+      setsuccess(true);
     } else {
       const resp = await axios.put(
         "http://localhost:7000/api/tweet/toggleLike",

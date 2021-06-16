@@ -24,7 +24,7 @@ function App() {
           <Route exact path="/signup">
             <Signup />
           </Route>
-          <Route exact path="/comment">
+          <Route exact path="/comment/:id">
             <Comment />
           </Route>
           <Route exact path="/profile">
