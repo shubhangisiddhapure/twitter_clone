@@ -56,15 +56,17 @@ router.post(
   }
 );
 
-router.put("/user/:userid/follow", auth, async (req, res) => {
+router.post("/follow", auth, async (req, res) => {
+  const userid = req.body.userid;
   try {
     //The user exists
-    const user = await User.findById(req.params.userid);
+
+    const user = await User.findById(userid);
     if (!user) {
       return res.status(400).json({ errors: [{ msg: "user not found" }] });
     }
     // The user is not the logged in user
-    if (req.params.userid === req.user.id) {
+    if (userid === req.user.id) {
       return res
         .status(400)
         .json({ errors: [{ msg: "You can't follow yourself" }] });
@@ -73,53 +75,52 @@ router.put("/user/:userid/follow", auth, async (req, res) => {
     if (user.followers.includes(req.user.id)) {
       return res.status(400).json({ message: "You are already following him" });
     }
-    await User.findByIdAndUpdate(req.params.userid, {
+    await User.findByIdAndUpdate(userid, {
       $push: { followers: req.user.id },
       $inc: { followersCount: 1 },
     });
     await User.findByIdAndUpdate(req.user.id, {
-      $push: { following: req.params.userid },
+      $push: { following: req.body.userid },
       $inc: { followingCount: 1 },
     });
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: "following", user });
   } catch (err) {
     console.log(err);
     res.status(500).send("sever error");
   }
 });
 
-router.put("/user/:userid/unfollow", auth, async (req, res) => {
+router.post("/unfollow", auth, async (req, res) => {
+  const userid = req.body.userid;
   try {
     //The user exists
-    const user = await User.findById(req.params.userid);
+    const user = await User.findById(userid);
     if (!user) {
       return res.status(400).json({ errors: [{ msg: "user not found" }] });
     }
     // The user is not the logged in user
-    if (req.params.userid === req.user.id) {
+    if (userid === req.user.id) {
       return res
         .status(400)
         .json({ errors: [{ msg: "You can't unfollow yourself" }] });
     }
     if (user.followers.includes(req.user.id)) {
-      await User.findByIdAndUpdate(req.params.userid, {
+      await User.findByIdAndUpdate(userid, {
         $pull: { followers: req.user.id },
         $inc: { followersCount: -1 },
       });
       console.log("shubhangi");
       await User.findByIdAndUpdate(req.user.id, {
-        $pull: { following: req.params.userid },
+        $pull: { following: userid },
         $inc: { followingCount: -1 },
       });
-      return res.status(200).json({ success: true });
-    }
-    else {
-       return res.status(500).send("You are not following to user");
+      return res.status(200).json({ success: "unfollowed", user });
+    } else {
+      return res.status(401).send("You are not following to user");
     }
   } catch (err) {
     console.log(err);
     res.status(500).send("sever error");
   }
 });
-
 module.exports = router;

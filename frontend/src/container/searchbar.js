@@ -1,42 +1,45 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Form, FormControl,  } from "react-bootstrap";
-import {  useHistory } from "react-router-dom";
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 const NavBar = () => {
-  const history = useHistory();
+  const history = useHistory("");
   const [users, setUsers] = useState([]);
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [userdata, setUserdata] = useState("");
   useEffect(() => {
     const loadUsers = async () => {
-      const response = await axios.get(
-        "http://localhost:7000/api/allusers"
-      );
+      const response = await axios.get("http://localhost:7000/api/allusers");
       setUsers(response.data.data);
     };
     loadUsers();
   }, []);
   const onSuggestHandler = async (text) => {
-  
+    setUserdata(true);
     setText(text);
     setSuggestions([]);
     const data = text;
     console.log(data);
-    const profile = await axios.post(
-      "http://localhost:7000/api/userprofile",
-      { username:data }
-    );
-    console.log(profile);
-    if (profile) {
-      console.log(profile.data.data);
-      history.push({
-        pathname: "/userprofile",
-        state: { data: profile.data.data },
-      });
-      return true;
-    }
+    history.push({
+      pathname: "/userprofile",
+      state: { detail: data },
+    });
+    // const profile = await axios.post(
+    //   "http://localhost:7000/api/userprofile",
+    //   { username:data }
+    // );
+    //   if (profile){
+    //     console.log(profile.data.data)
+    //     history.push({
+    //       pathname: "/userprofile",
+    //       state: { data:profile.data.data },
+    //     });
+    //     return true;
+
+    //   }
   };
   const onChangeHandler = (text) => {
     let matches = [];
@@ -52,7 +55,7 @@ const NavBar = () => {
   };
   return (
     <div>
-      <Navbar style={{ backgroundColor: "#50B7F5"}}>
+      <Navbar style={{ backgroundColor: "#50B7F5" }}>
         <Nav className="mr-auto">
           <Nav.Link href="/profile">My Profile</Nav.Link>
         </Nav>

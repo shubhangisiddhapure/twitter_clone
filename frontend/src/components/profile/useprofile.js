@@ -3,17 +3,94 @@
 import Navbar from "../../container/Navbars";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import "./profile.css";
+var jwt = require("jsonwebtoken");
 const Userprofile = (props) => {
+  const history = useHistory("");
   const [profile, setProfile] = useState("");
+  const [follower, setFollower] = useState("");
+  const [count, setCount] = useState("");
   const location = useLocation();
+  const token = localStorage.getItem("login");
+  console.log(token);
+  var decode1 = jwt.decode(token);
+  const loggeduserId = decode1.user.id;
+  console.log(loggeduserId);
+  // const followers= location.state.data.followers
+  // console.log(followers,loggeduserId)
+  // const result=followers.filter(id =>id===loggeduserId)
+  // console.log(location.state.data._id)
+  // if (loggeduserId===location.state.data._id){
+  //   history.push("/profile")
+  // }
+
   useEffect(async () => {
-    setProfile(location.state.data);
-    // const response = await axios.post("http://localhost:7000/api/userprofile",{ username:data });
-    // setProfile(response.data.data);
+    //   if(result.length===0){
+    //    setFollower(true)
+    //  }
+    const response = await axios.post("http://localhost:7000/api/userprofile", {
+      username: location.state.detail,
+    });
+    setProfile(response.data.data);
+    console.log(response.data.data.followersCount);
+    setCount(response.data.data.followersCount);
+
+    // console.log(loggeduserId,response.data.data._id)
+
+    if (loggeduserId === response.data.data._id) {
+      history.push("/profile");
+    }
+    const followerlist = response.data.data.followers;
+    const result = followerlist.filter((id) => id === loggeduserId);
+    // console.log(result)
+    if (result.length === 0) {
+      setFollower(true);
+    } else {
+      setFollower(false);
+    }
   }, [location]);
+
+  const Follow = async (e) => {
+    const profileid = profile._id;
+    const resp = await axios.post(
+      "http://localhost:7000/api/follow",
+      { userid: profileid },
+      {
+        headers: {
+          "x-auth-token": localStorage.getItem("login"),
+        },
+      }
+    );
+    // console.log(resp)
+    // const followerslist = (resp.data.data.followersCount)
+    console.log(resp.data.user.followersCount);
+
+    setFollower(false);
+    setCount(count + 1);
+  };
+
+  const UnFollow = async (e) => {
+    const profileid = profile._id;
+    const resp = await axios.post(
+      "http://localhost:7000/api/unfollow",
+      { userid: profileid },
+      {
+        headers: {
+          "x-auth-token": localStorage.getItem("login"),
+        },
+      }
+    );
+
+    console.log(resp.data.user.followersCount);
+    //  const followerlist = (resp.data.data.followersCount)
+    setCount(count - 1);
+
+    setFollower(true);
+    // setCount(followerlist)
+  };
+
   return (
     <div>
       <Navbar></Navbar>
@@ -44,7 +121,28 @@ const Userprofile = (props) => {
                     month: "short",
                   })}
                   <div>
-                    <Button className="tweetBox__tweetButton">Follow</Button>
+                    {follower === true ? (
+                      <Button
+                        className="tweetBox__tweetButton"
+                        onClick={() => Follow()}
+                      >
+                        Follow
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div>
+                    {follower === false ? (
+                      <Button
+                        className="tweetBox__tweetButton"
+                        onClick={() => UnFollow()}
+                      >
+                        UnFollow
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div class="row text-center m-t-20">
@@ -53,7 +151,7 @@ const Userprofile = (props) => {
                     <small>Tweets</small>
                   </div>
                   <div class="col-lg-4 col-md-4 m-t-20">
-                    <h3 class="m-b-0 font-light">{profile.followersCount}</h3>
+                    <h3 class="m-b-0 font-light">{count}</h3>
                     <small>Followers</small>
                   </div>
                   <div class="col-lg-4 col-md-4 m-t-20">

@@ -38,9 +38,11 @@ router.post(
 //get all tweet
 router.get("/alltweet", async (req, res) => {
   try {
-
+    // const userid = req.user.id
+    // console.log(userid);
     const tweets = await Tweet.find().sort("-createdAt").populate("user");
-    
+    const user = tweets[0].user.following;
+    console.log(user);
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "Tweets not found" });
     }
