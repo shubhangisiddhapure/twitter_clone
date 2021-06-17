@@ -14,8 +14,14 @@ const Home = (props) => {
   const [tweets, settweets] = useState("");
   const location = useLocation();
   useEffect(async () => {
-    const response = await axios.get("http://localhost:7000/api/alltweet");
+    console.log("shubhangi")
+    const response = await axios.get("http://localhost:7000/api/alltweet", {
+      headers: {
+        "x-auth-token": localStorage.getItem("login"),
+      },
+    });
     settweets(response.data.data);
+    console.log(response.data.data);
   }, []);
 
   return (

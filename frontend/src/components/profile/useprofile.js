@@ -18,14 +18,7 @@ const Userprofile = (props) => {
   var decode1 = jwt.decode(token);
   const loggeduserId = decode1.user.id;
   console.log(loggeduserId);
-  // const followers= location.state.data.followers
-  // console.log(followers,loggeduserId)
-  // const result=followers.filter(id =>id===loggeduserId)
-  // console.log(location.state.data._id)
-  // if (loggeduserId===location.state.data._id){
-  //   history.push("/profile")
-  // }
-
+ 
   useEffect(async () => {
     //   if(result.length===0){
     //    setFollower(true)

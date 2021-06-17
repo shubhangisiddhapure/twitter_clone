@@ -37,15 +37,11 @@ const Login = props => {
       const Token = resp.data.token;
       if (Token) {
         const token = localStorage.setItem("login", resp.data.token);
-      } 
-      const response = await axios.get("http://localhost:7000/api/alltweet");
-      if (response) {
         history.push({
-          pathname: "/home",
-          state: { detail: response.data.data },
+          pathname: "/home"
         });
         return true;
-      }
+      } 
     } catch (err) {
       setError("Inavalid Details");
       return false

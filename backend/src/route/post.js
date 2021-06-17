@@ -36,20 +36,29 @@ router.post(
 );
 
 //get all tweet
-router.get("/alltweet", async (req, res) => {
+router.get("/alltweet",auth, async (req, res) => {
   try {
-    // const userid = req.user.id
-    // console.log(userid);
+    const alltweets=[]
+     const userid = req.user.id
+    console.log(userid);
     const tweets = await Tweet.find().sort("-createdAt").populate("user");
-    const user = tweets[0].user.following;
-    console.log(user);
     if (tweets.length === 0) {
-      return res.status(404).json({ msg: "Tweets not found" });
+      return res.status(404).json({ msg: "All Tweets not found" });
     }
-    res.status(200).json({ msg: "All tweets", data: tweets });
+    // const user = tweets[0].user.following;
+    // console.log(tweets.length);
+    for (let i = 0; i < tweets.length; i++) {
+      const followrid = tweets[i].user.followers;
+       console.log(followrid);
+      if (followrid.includes(userid)) {
+        alltweets.push(tweets[i]);
+      } 
+    }
+
+    return res.status(200).json({ msg: "All tweets", data: alltweets });
   } catch (err) {
     console.log(err);
-    res.status(500).send("sever error");
+    return res.status(500).send("sever error");
   }
 });
 //like or unlike to tweet
@@ -59,7 +68,7 @@ router.put("/tweet/toggleLike", auth, async (req, res) => {
     if (!tweet) {
       return res.status(404).json({ msg: "Tweet Not found" });
     }
-  
+
     if (tweet.likes.includes(req.user.id)) {
       const index = tweet.likes.indexOf(req.user.id);
       tweet.likes.splice(index);
@@ -72,7 +81,6 @@ router.put("/tweet/toggleLike", auth, async (req, res) => {
     }
     res.status(200).json({ msg: "Tweet", data: tweet });
   } catch (err) {
-    
     res.status(500).send("sever error");
   }
 });
@@ -111,11 +119,11 @@ router.put(
   }
 );
 //get all comment of particuler tweer
-router.post("/comment",async (req, res) => {
+router.post("/comment", async (req, res) => {
   try {
     const tweet = req.body.id;
     console.log(tweet);
-    const comments = await Comment.find({tweet})
+    const comments = await Comment.find({ tweet })
       .sort("-createdAt")
       .populate("user");
 
@@ -129,7 +137,7 @@ router.post("/comment",async (req, res) => {
   }
 });
 //get mycomment
-router.get("/myTweet", auth,async (req, res) => {
+router.get("/myTweet", auth, async (req, res) => {
   try {
     const user = req.user.id;
     const tweets = await Tweet.find({ user })
