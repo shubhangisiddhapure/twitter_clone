@@ -6,8 +6,8 @@ import Login from "./components/auth/login";
 import Home from "./components/Home/home";
 import Signup from "./components/auth/signup";
 import Comment from "./components/Home/comment";
-import Profile from "./components/Home/Profile"
-import Userprofile from "./components/Home/useprofile"
+import Profile from "./components/profile/Profile"
+import Userprofile from "./components/profile/useprofile"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {

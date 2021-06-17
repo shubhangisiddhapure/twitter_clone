@@ -8,7 +8,7 @@ import axios from "axios";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
 import { Avatar } from "@material-ui/core";
-import "./home.css";
+import "../../components/Home/home.css"
 const MyTweets = (props) => {
   console.log("tweetbox");
   const [tweetbox, settweetbox] = useState("");

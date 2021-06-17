@@ -1,8 +1,8 @@
 /** @format */
 
 import axios from "axios";
-import { Link, useHistory, withRouter } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
 var jwt = require("jsonwebtoken");
 const Like = (props) => {
@@ -12,7 +12,6 @@ const Like = (props) => {
   const token = localStorage.getItem("login")
   var decode1 = jwt.decode(token);
   const loggeduserId=decode1.user.id;
-  const islike = localStorage.getItem("sucess");
   const _id = props.data._id;
   const [sucess, setsuccess] = useState();
   const [likesState, setLikes] = useState(like);
