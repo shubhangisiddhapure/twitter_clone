@@ -126,4 +126,24 @@ router.post("/comment",async (req, res) => {
     res.status(500).send("sever error");
   }
 });
+//get mycomment
+router.get("/myTweet", auth,async (req, res) => {
+  try {
+    const user = req.user.id;
+    const tweets = await Tweet.find({ user })
+      .sort("-createdAt")
+      .populate("user");
+
+    if (tweets.length === 0) {
+      return res.status(404).json({ msg: "tweets not found" });
+    }
+    // console.log(tweets[0].likes);
+    //    const likes = tweets[0].likes.map((like) => like.toString());
+    //   tweets.isLiked = tweets.likes.includes(req.user.id);
+    res.status(200).json({ msg: "All comments", data: tweets });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("sever error");
+  }
+});
 module.exports = router;

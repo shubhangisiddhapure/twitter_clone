@@ -4,7 +4,7 @@ import { Avatar } from "@material-ui/core";
 import Navbar from "../../container/Navbars"
 import "./profile.css";
 import axios from "axios";
-
+import MyTweets from "./MyTweets";
 const Profile = () => {
   const [profiles, setProfile] = useState();
   useEffect(async () => {
@@ -67,6 +67,7 @@ const Profile = () => {
           </div>
         </div>
       )}
+      <MyTweets/>
     </div>
   );
 };
