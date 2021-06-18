@@ -109,7 +109,6 @@ router.post("/unfollow", auth, async (req, res) => {
         $pull: { followers: req.user.id },
         $inc: { followersCount: -1 },
       });
-      console.log("shubhangi");
       await User.findByIdAndUpdate(req.user.id, {
         $pull: { following: userid },
         $inc: { followingCount: -1 },

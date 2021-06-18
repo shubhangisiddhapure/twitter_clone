@@ -43,7 +43,7 @@ const NavBar = () => {
   };
   const onChangeHandler = (text) => {
     let matches = [];
-    if (text.length >= 1) {
+    if (text.length >= 2) {
       matches = users.filter((user) => {
         const regex = new RegExp(`${text}`, "gi");
         return user.username.match(regex);

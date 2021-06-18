@@ -35,27 +35,28 @@ router.post(
   }
 );
 
-//get all tweet
-router.get("/alltweet",auth, async (req, res) => {
+//get all tweet for feed page
+router.get("/alltweet", auth, async (req, res) => {
   try {
-    const alltweets=[]
-     const userid = req.user.id
-    console.log(userid);
+    const alltweets = [];
+    const MyTweets = [];
+    const userid = req.user.id;
     const tweets = await Tweet.find().sort("-createdAt").populate("user");
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
-    // const user = tweets[0].user.following;
-    // console.log(tweets.length);
     for (let i = 0; i < tweets.length; i++) {
+      if (tweets[i].user.id === userid) {
+        alltweets.push(tweets[i]);
+      };
       const followrid = tweets[i].user.followers;
-       console.log(followrid);
       if (followrid.includes(userid)) {
         alltweets.push(tweets[i]);
-      } 
-    }
-
-    return res.status(200).json({ msg: "All tweets", data: alltweets });
+      }
+    }   
+    return res
+      .status(200)
+      .json({ msg: "All tweets", data: alltweets });
   } catch (err) {
     console.log(err);
     return res.status(500).send("sever error");
@@ -95,14 +96,14 @@ router.put(
       res.status(400).json({ errors: errors });
     }
     try {
-      const tweet = await Tweet.findById(req.body.tweetid);
+      const tweet = await Tweet.findById(req.body.id);
 
       if (!tweet) {
         return res.status(404).json({ msg: "Tweet Not found" });
       }
       const newComment = new Comment({
         user: req.user.id,
-        tweet: req.body.tweetid,
+        tweet: req.body.id,
         text: req.body.text,
       });
       const comment = await newComment.save();
@@ -136,7 +137,7 @@ router.post("/comment", async (req, res) => {
     res.status(500).send("sever error");
   }
 });
-//get mycomment
+//get mypost
 router.get("/myTweet", auth, async (req, res) => {
   try {
     const user = req.user.id;
@@ -147,13 +148,94 @@ router.get("/myTweet", auth, async (req, res) => {
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "tweets not found" });
     }
-    // console.log(tweets[0].likes);
-    //    const likes = tweets[0].likes.map((like) => like.toString());
-    //   tweets.isLiked = tweets.likes.includes(req.user.id);
-    res.status(200).json({ msg: "All comments", data: tweets });
+    return res.status(200).json({ msg: "All comments", data: tweets });
   } catch (err) {
     console.log(err);
-    res.status(500).send("sever error");
+    return res.status(500).send("sever error");
   }
 });
+//get particular tweet by id
+router.post("/selected/tweet", async (req, res) => {
+  try {
+    const _id = req.body.id;
+    console.log(_id);
+    const tweets = await Tweet.findById(req.body.id)
+      .sort("-createdAt")
+      .populate("user");
+    return res.status(200).json({ msg: "All tweets", data: tweets });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("sever error");
+  }
+});
+
+//do retweet (shear a tweet)
+router.put("/reTweet", auth, async (req, res) => {
+  try {
+    const tweet = await Tweet.findById(req.body.id);
+    if (!tweet) {
+      return res.status(404).json({ msg: "tweet not found" });
+    }
+    if (tweet.retweets.includes(req.user.id)) {
+      return res.status(400).json({ message: "you alearday retweeted " });
+    }
+    tweet.retweets.push(req.user.id);
+    tweet.retweetCount = tweet.retweetCount + 1;
+    await tweet.save();
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { tweets: tweet._id },
+      $inc: { tweetsCount: 1 },
+    });
+    return res.status(200).json({ success: true, data: tweet });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("sever error");
+  }
+});
+//do undo retweet 
+router.put("/undoRetweet", auth, async (req, res) => {
+  try {
+    const tweet = await Tweet.findById(req.body.id);
+    if (!tweet) {
+      return res.status(404).json({ msg: "tweet not found" });
+    }
+  if (tweet.retweets.includes(req.user.id)) {
+    const index = tweet.retweets.indexOf(req.user.id);
+    tweet.retweets.splice(index, 1);
+    tweet.retweetCount = tweet.retweetCount - 1;
+    await tweet.save();
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { tweets: req.params.id },
+      $inc: { tweetsCount: -1 },
+    });
+  }
+    return res.status(200).json({ success: true, data: tweet });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("sever error");
+  }
+});
+
+//getting all tweets of a searcha user
+router.post("/usertweet",async(req,res)=>{
+  const user=req.body.id
+  // console.log(userid)
+    try {
+      const tweets = await Tweet.find({user}).sort("-createdAt").populate({
+        path: "user",
+        select: "username avatar fullname",
+      });
+      console.log(tweets)
+      if (!tweets) {
+        res.status(400).json({ msg: "tweets not found" });
+      }
+      else{res.status(200).json({ tweets });}
+    } catch (err) {
+      res.status(500).send("Server Error");
+    }
+  }
+)
+
+
+
 module.exports = router;

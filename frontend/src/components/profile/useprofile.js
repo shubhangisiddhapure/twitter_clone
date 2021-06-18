@@ -1,7 +1,9 @@
 /** @format */
 
+import { Avatar } from "@material-ui/core";
 import Navbar from "../../container/Navbars";
 import React, { useState, useEffect } from "react";
+import { Card } from "react-bootstrap";
 import axios from "axios";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
@@ -9,40 +11,44 @@ import "./profile.css";
 var jwt = require("jsonwebtoken");
 const Userprofile = (props) => {
   const history = useHistory("");
+  const [id, setId] = useState("");
   const [profile, setProfile] = useState("");
   const [follower, setFollower] = useState("");
+  const [alltweets, setAlltweets] = useState("");
   const [count, setCount] = useState("");
   const location = useLocation();
   const token = localStorage.getItem("login");
-  console.log(token);
+  // console.log(token)
   var decode1 = jwt.decode(token);
   const loggeduserId = decode1.user.id;
-  console.log(loggeduserId);
- 
+  // console.log(loggeduserId)
   useEffect(async () => {
-    //   if(result.length===0){
-    //    setFollower(true)
-    //  }
     const response = await axios.post("http://localhost:7000/api/userprofile", {
       username: location.state.detail,
     });
     setProfile(response.data.data);
-    console.log(response.data.data.followersCount);
     setCount(response.data.data.followersCount);
-
-    // console.log(loggeduserId,response.data.data._id)
-
     if (loggeduserId === response.data.data._id) {
       history.push("/profile");
     }
     const followerlist = response.data.data.followers;
     const result = followerlist.filter((id) => id === loggeduserId);
-    // console.log(result)
+
     if (result.length === 0) {
       setFollower(true);
     } else {
       setFollower(false);
     }
+    setId(response.data.data._id);
+
+    const id = response.data.data._id;
+    console.log(id);
+    const profiletweet = await axios.post(
+      "http://localhost:7000/api/usertweet",
+      { id }
+    );
+    console.log(profiletweet.data.tweets);
+    setAlltweets(profiletweet.data.tweets);
   }, [location]);
 
   const Follow = async (e) => {
@@ -56,14 +62,12 @@ const Userprofile = (props) => {
         },
       }
     );
-    // console.log(resp)
-    // const followerslist = (resp.data.data.followersCount)
+
     console.log(resp.data.user.followersCount);
 
     setFollower(false);
     setCount(count + 1);
   };
-
   const UnFollow = async (e) => {
     const profileid = profile._id;
     const resp = await axios.post(
@@ -77,11 +81,10 @@ const Userprofile = (props) => {
     );
 
     console.log(resp.data.user.followersCount);
-    //  const followerlist = (resp.data.data.followersCount)
+
     setCount(count - 1);
 
     setFollower(true);
-    // setCount(followerlist)
   };
 
   return (
@@ -157,6 +160,61 @@ const Userprofile = (props) => {
           </div>
         </div>
       )}
+
+      <div>
+        {alltweets &&
+          alltweets.map((tweet, index) => {
+            console.log(tweet);
+            const userid = localStorage.getItem("id");
+            const createdAt = new Date(tweet.createdAt).toLocaleDateString(
+              "en-GB",
+              {
+                day: "numeric",
+                month: "short",
+              }
+            );
+            if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
+              const success = true;
+              localStorage.setItem("sucess", success);
+            }
+            return (
+              <div>
+                <Card
+                  className="shadow p-3 mb-2 bg-white rounded"
+                  style={{
+                    width: "50%",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
+                >
+                  <div className="row d-flex">
+                    <Avatar
+                      src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
+                      style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+                    />
+                    <div className="data">
+                      <b>{profile.fullname}</b>@{profile.username}
+                      <span> </span>
+                      {createdAt}
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
+                  <div className="col d-flex">
+                    <div className="rowdata">like</div>
+                    <div className="rowdata">
+                      Comments
+                      {tweet.replaytotweetCount}
+                    </div>
+                    <div className="rowdata">
+                      <h5>Retweet</h5>
+                      {tweet.retweetCount}
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

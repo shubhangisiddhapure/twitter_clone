@@ -1,17 +1,14 @@
 /** @format */
 
 import React, { useState } from "react";
-import { Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
-const Commentbox = (props) => {
+const Profilecomment = (props) => {
   const history = useHistory();
-  const [sucess, setsucces] = useState("");
-  const tweets = props.data._id;
-const id = props.data._id;
+  const id = props.data._id;
   const commentpage = () => {
     history.push({
-      pathname: "/comment/"+id,
-      state: { detail: props.data },
+      pathname: "/comment/" + id,
     });
   };
 
@@ -21,4 +18,4 @@ const id = props.data._id;
     </div>
   );
 };
-export default Commentbox;
+export default Profilecomment;

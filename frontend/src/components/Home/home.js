@@ -4,14 +4,17 @@ import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import Like from "./Like";
 import { useLocation } from "react-router-dom";
-import Comment from "../../container/commentbox"
+import Comment from "./commentbox"
+import ShareIcon from "@material-ui/icons/Share";
 import axios from "axios";
+import MyTweets from "../profile/MyTweets";
 import NavBar from "../../container/searchbar";
 import Tweetbox from "../../container/tweetbox";
 import { Avatar } from "@material-ui/core";
 import "./home.css";
 const Home = (props) => {
   const [tweets, settweets] = useState("");
+  const [mytTweets, setmyTweets] = useState("");
   const location = useLocation();
   useEffect(async () => {
     console.log("shubhangi")
@@ -21,6 +24,7 @@ const Home = (props) => {
       },
     });
     settweets(response.data.data);
+    setmyTweets(response.data.MyTweets);
     console.log(response.data.data);
   }, []);
 
@@ -32,8 +36,7 @@ const Home = (props) => {
         <Tweetbox />
         {tweets &&
           tweets.map((tweet, index) => {
-            console.log(tweet)
-            // const userid = localStorage.getItem("id");
+            // console.log(tweet);
             const createdAt = new Date(tweet.createdAt).toLocaleDateString(
               "en-GB",
               {
@@ -41,12 +44,8 @@ const Home = (props) => {
                 month: "short",
               }
             );
-            // if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
-            //   const success = true;
-            //   localStorage.setItem("sucess", success);
-            // }
             return (
-              <div >
+              <div>
                 <Card
                   className="shadow p-3 mb-2 bg-white rounded"
                   style={{
@@ -66,7 +65,7 @@ const Home = (props) => {
                       {createdAt}
                     </div>
                   </div>
-                  <div style={{marginBottom:"3%"}}>{tweet.text}</div>
+                  <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                   <div className="col d-flex">
                     <div className="rowdata">
                       <Like data={tweet} />
@@ -76,7 +75,7 @@ const Home = (props) => {
                       {tweet.replaytotweetCount}
                     </div>
                     <div className="rowdata">
-                      <h5>Retweet</h5>
+                      <ShareIcon  />
                       {tweet.retweetCount}
                     </div>
                   </div>

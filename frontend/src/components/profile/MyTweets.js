@@ -4,9 +4,10 @@ import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useLocation, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
-
+import ShareIcon from "@material-ui/icons/Share";
+import Profilecomment from "./profilecomment";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
-import Comments from "@material-ui/icons/ChatBubbleOutline";
+
 import { Avatar } from "@material-ui/core";
 import "../../components/Home/home.css"
 const MyTweets = (props) => {
@@ -65,11 +66,12 @@ const MyTweets = (props) => {
                     {tweet.likesCount}
                   </div>
                   <div className="rowdata">
-                    <Comments />
+                    <Profilecomment data={tweet} />
                     {tweet.replaytotweetCount}
                   </div>
                   <div className="rowdata">
-                    <h5>Retweet</h5>
+                    <ShareIcon />
+                    {tweet.retweetCount}
                   </div>
                 </div>
               </Card>

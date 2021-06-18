@@ -5,7 +5,7 @@ import "./App.css";
 import Login from "./components/auth/login";
 import Home from "./components/Home/home";
 import Signup from "./components/auth/signup";
-import Comment from "./components/Home/comment";
+import Comment from "./container/comment";
 import Profile from "./components/profile/Profile"
 import Userprofile from "./components/profile/useprofile"
 import "bootstrap/dist/css/bootstrap.min.css";

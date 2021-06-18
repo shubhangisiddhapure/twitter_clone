@@ -1,8 +1,8 @@
 /** @format */
-import "../../container/tweetbox.css";
+import "./tweetbox.css";
 import axios from "axios";
-import Like from "./Like";
-import Navbar from "../../container/Navbars";
+import Like from "../components/Home/Like";
+import Navbar from "./Navbars";
 import Postcomment from "./postcomment";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
 import { useHistory, useParams, useLocation } from "react-router-dom";
@@ -12,34 +12,34 @@ import { Avatar, Button } from "@material-ui/core";
 const Comment = (props) => {
   const history = useHistory();
   const [text, setText] = useState("");
-  const [tweetid, setid] = useState("");
+  const [success, setsuccess] = useState("");
   const [error, seterror] = useState("");
   const [tweet, settweet] = useState("");
-  const location = useLocation();
-  useEffect(() => {
-    const tweetid = location.state.detail._id;
-    const tweetdata = location.state.detail;
-    setid(tweetid);
-    settweet(tweetdata);
-  }, [location]);
-  // console.log(tweetid);
-  const tweetids = tweetid;
+  let { id } = useParams();
+  console.log(id, "comment file");
+
+  useEffect(async () => {
+    console.log("shubhangi", id);
+    const response = await axios.post("http://localhost:7000/api/selected/tweet", {id});
+    console.log(response.data.data);
+     settweet(response.data.data);
+  }, []);
+  
   const openComment = async () => {
     try {
       seterror(false);
       const resp = await axios.put(
         "http://localhost:7000/api/tweet/replaytweet",
-        { tweetid, text },
+        { id, text },
         {
           headers: {
             "x-auth-token": localStorage.getItem("login"),
           },
         }
       );
+      console.log(resp)
       if (resp) {
-        history.push({
-          pathname: "/home",
-        });
+        setsuccess("Comment added successfully");
       }
     } catch (err) {
       seterror("Please add Text");
@@ -113,6 +113,7 @@ const Comment = (props) => {
         </div>
       </Card>
       {error && <p style={{ color: "red" }}> {error} </p>}
+      {success}
     </div>
   );
 };

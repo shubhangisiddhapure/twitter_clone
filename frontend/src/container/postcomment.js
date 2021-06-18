@@ -7,12 +7,10 @@ import axios from "axios";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
 import { Avatar } from "@material-ui/core";
-import "./home.css";
+import "../components/Home/home.css";
 const Postcomment = (props) => {
   const [commentbox, setcommentbox] = useState("");
-
   let { id } = useParams();
-
   const location = useLocation();
   useEffect(async () => {
     console.log(id);
