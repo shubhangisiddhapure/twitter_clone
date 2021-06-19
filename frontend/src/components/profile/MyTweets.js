@@ -6,8 +6,8 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import ShareIcon from "@material-ui/icons/Share";
 import Profilecomment from "./profilecomment";
-import LikeButton from "@material-ui/icons/FavoriteTwoTone";
 
+import Like from "../../container/Like";
 import { Avatar } from "@material-ui/core";
 import "../../components/Home/home.css"
 const MyTweets = (props) => {
@@ -62,8 +62,7 @@ const MyTweets = (props) => {
                 <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                 <div className="col d-flex">
                   <div className="rowdata">
-                    <LikeButton />
-                    {tweet.likesCount}
+                    <Like data={tweet} />
                   </div>
                   <div className="rowdata">
                     <Profilecomment data={tweet} />

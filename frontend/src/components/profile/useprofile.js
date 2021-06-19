@@ -1,12 +1,14 @@
 /** @format */
 
 import { Avatar } from "@material-ui/core";
-import Navbar from "../../container/Navbars";
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import axios from "axios";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import Navbar from "../../container/Navbars";
+import Comment from "./userprofilecomment"
+import Like from "../../container/Like";
 import "./profile.css";
 var jwt = require("jsonwebtoken");
 const Userprofile = (props) => {
@@ -200,9 +202,11 @@ const Userprofile = (props) => {
                   </div>
                   <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                   <div className="col d-flex">
-                    <div className="rowdata">like</div>
                     <div className="rowdata">
-                      Comments
+                      <Like data={tweet} />
+                    </div>
+                    <div className="rowdata">
+                      <Comment data={tweet} />
                       {tweet.replaytotweetCount}
                     </div>
                     <div className="rowdata">

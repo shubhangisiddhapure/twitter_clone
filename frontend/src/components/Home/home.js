@@ -2,19 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
-import Like from "./Like";
+import Like from "../../container/Like";
 import { useLocation } from "react-router-dom";
 import Comment from "./commentbox"
 import ShareIcon from "@material-ui/icons/Share";
 import axios from "axios";
-import MyTweets from "../profile/MyTweets";
+
 import NavBar from "../../container/searchbar";
 import Tweetbox from "../../container/tweetbox";
 import { Avatar } from "@material-ui/core";
 import "./home.css";
 const Home = (props) => {
   const [tweets, settweets] = useState("");
-  const [mytTweets, setmyTweets] = useState("");
+  // const [mytTweets, setmyTweets] = useState("");
   const location = useLocation();
   useEffect(async () => {
     console.log("shubhangi")
@@ -24,7 +24,7 @@ const Home = (props) => {
       },
     });
     settweets(response.data.data);
-    setmyTweets(response.data.MyTweets);
+    // setmyTweets(response.data.MyTweets);
     console.log(response.data.data);
   }, []);
 

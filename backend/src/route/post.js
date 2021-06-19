@@ -65,7 +65,7 @@ router.get("/alltweet", auth, async (req, res) => {
 //like or unlike to tweet
 router.put("/tweet/toggleLike", auth, async (req, res) => {
   try {
-    const tweet = await Tweet.findById(req.body._id);
+    const tweet = await Tweet.findById(req.body.id);
     if (!tweet) {
       return res.status(404).json({ msg: "Tweet Not found" });
     }
@@ -148,7 +148,7 @@ router.get("/myTweet", auth, async (req, res) => {
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "tweets not found" });
     }
-    return res.status(200).json({ msg: "All comments", data: tweets });
+    return res.status(200).json({ msg: "All tweets", data: tweets });
   } catch (err) {
     console.log(err);
     return res.status(500).send("sever error");

@@ -1,7 +1,7 @@
 /** @format */
 import "./tweetbox.css";
 import axios from "axios";
-import Like from "../components/Home/Like";
+import Like from "./Like";
 import Navbar from "./Navbars";
 import Postcomment from "./postcomment";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
@@ -19,7 +19,6 @@ const Comment = (props) => {
   console.log(id, "comment file");
 
   useEffect(async () => {
-    console.log("shubhangi", id);
     const response = await axios.post("http://localhost:7000/api/selected/tweet", {id});
     console.log(response.data.data);
      settweet(response.data.data);
