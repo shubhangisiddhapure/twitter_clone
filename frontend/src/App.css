@@ -15,6 +15,12 @@ body {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.index{
+  position: absolute;
+  left:75.5%;
+  height:35px;
+}
+
 
 .App-header {
   background-color: #282c34;
@@ -41,13 +47,16 @@ body {
 }
 .suggestion{
   cursor: pointer;
+  background-color: white;
   border-right: 1px solid  #E6ECF0 ;
   border-left: 1px solid #E6ECF0;
   border-bottom: 1px solid  #E6ECF0;
-  border-radius: 8px;
   width: 100%;
   height: 40px;
 }
 .suggestion:hover{
   background-color:#e2e7eb;
+}
+.index2{
+  border-radius: 25px;
 }

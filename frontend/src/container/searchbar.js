@@ -59,7 +59,7 @@ const NavBar = () => {
         <Nav className="mr-auto">
           <Nav.Link href="/profile">My Profile</Nav.Link>
         </Nav>
-        <Nav className="mr-auto">
+        <Nav className="index mr-auto">
           <Form>
             <FormControl
               type="text"
@@ -85,7 +85,7 @@ const NavBar = () => {
               ))}
           </Form>
         </Nav>
-        <Nav className="ml-auto">
+        <Nav className=" ml-auto">
           <Nav.Link href="/">Logout</Nav.Link>
         </Nav>
       </Navbar>
