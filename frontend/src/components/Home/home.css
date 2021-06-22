@@ -1,11 +1,15 @@
+/** @format */
+
 .rowdata {
   margin-left: 20%;
-
 }
 .data {
   margin-left: 2%;
 }
-.rowdataa{
-
-  justify-content: left 
+.rowdataa {
+  justify-content: left;
+}
+.styleofdata {
+  align-items: left;
+  justify-content: left;
 }

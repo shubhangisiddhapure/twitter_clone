@@ -66,6 +66,8 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  resetToken: String,
+  exprieToken: Date,
 });
 UserSchema.plugin(uniqueValidator, {
   type: "mongoose-unique-validator",

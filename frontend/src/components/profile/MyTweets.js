@@ -6,10 +6,10 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import ShareIcon from "@material-ui/icons/Share";
 import Profilecomment from "./profilecomment";
-
+import Retweet from "../../container/Retweet";
 import Like from "../../container/Like";
-import { Avatar } from "@material-ui/core";
-import "../../components/Home/home.css"
+import Avatar from "react-avatar";
+import "../../components/Home/home.css";
 const MyTweets = (props) => {
   console.log("tweetbox");
   const [tweetbox, settweetbox] = useState("");
@@ -48,29 +48,49 @@ const MyTweets = (props) => {
                   marginLeft: "auto",
                 }}
               >
-                <div className="row d-flex">
+                <div className="col d-flex">
                   <Avatar
-                    src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-                    style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+                    name={tweet.user.fullname}
+                    size="50"
+                    round={true}
+                    colors={["red", "green", "blue"]}
                   />
                   <div className="data">
-                    <b>{tweet.user.fullname}</b>@{tweet.user.username}
-                    <span> </span>
-                    {createdAt}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "left",
+                        justifyContent: "left",
+                      }}
+                    >
+                      <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                      <span> </span>
+                      {createdAt}
+                    </div>
+                    <div
+                      style={{
+                        marginBottom: "3%",
+                        alignItems: "left",
+                        justifyContent: "left",
+                      }}
+                    >
+                      {tweet.text}
+                    </div>
                   </div>
                 </div>
-                <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                 <div className="col d-flex">
                   <div className="rowdata">
                     <Like data={tweet} />
                   </div>
                   <div className="rowdata">
-                    <Profilecomment data={tweet} />
-                    {tweet.replaytotweetCount}
+                    <div className="col d-flex">
+                      <Profilecomment data={tweet} />
+                      {tweet.replaytotweetCount}
+                    </div>
                   </div>
                   <div className="rowdata">
-                    <ShareIcon />
-                    {tweet.retweetCount}
+                    <Retweet data={tweet} />
+                    {/* {tweet.retweetCount} */}
                   </div>
                 </div>
               </Card>

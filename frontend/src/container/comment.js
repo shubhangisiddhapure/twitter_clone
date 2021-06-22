@@ -3,12 +3,14 @@ import "./tweetbox.css";
 import axios from "axios";
 import Like from "./Like";
 import Navbar from "./Navbars";
+import ShareIcon from "@material-ui/icons/Share";
 import Postcomment from "./postcomment";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { Avatar, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import Avatar from "react-avatar";
 const Comment = (props) => {
   const history = useHistory();
   const [text, setText] = useState("");
@@ -19,11 +21,14 @@ const Comment = (props) => {
   console.log(id, "comment file");
 
   useEffect(async () => {
-    const response = await axios.post("http://localhost:7000/api/selected/tweet", {id});
+    const response = await axios.post(
+      "http://localhost:7000/api/selected/tweet",
+      { id }
+    );
     console.log(response.data.data);
-     settweet(response.data.data);
+    settweet(response.data.data);
   }, []);
-  
+
   const openComment = async () => {
     try {
       seterror(false);
@@ -36,7 +41,7 @@ const Comment = (props) => {
           },
         }
       );
-      console.log(resp)
+      console.log(resp);
       if (resp) {
         setsuccess("Comment added successfully");
       }
@@ -58,21 +63,39 @@ const Comment = (props) => {
             marginLeft: "auto",
           }}
         >
-          <div className="row d-flex">
+          <div className="col d-flex">
             <Avatar
-              src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-              style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+              name={tweet.user.fullname}
+              size="50"
+              round={true}
+              colors={["red", "green", "blue"]}
             />
             <div className="data">
-              <b>{tweet.user.fullname}</b>@{tweet.user.username}
-              <span> </span>
-              {new Date(tweet.createdAt).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-              })}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "left",
+                  justifyContent: "left",
+                }}
+              >
+                <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                <span> </span>
+                {new Date(tweet.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                })}
+              </div>
+              <div
+                style={{
+                  marginBottom: "3%",
+                  alignItems: "left",
+                  justifyContent: "left",
+                }}
+              >
+                {tweet.text}
+              </div>
             </div>
           </div>
-          <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
           <div className="col d-flex">
             <div className="rowdata">
               <Like data={tweet} />
@@ -83,7 +106,7 @@ const Comment = (props) => {
               {tweet.replaytotweetCount}
             </div>
             <div className="rowdata">
-              <h5>Retweet</h5>
+              <ShareIcon />
               {tweet.retweetCount}
             </div>
           </div>
@@ -94,7 +117,13 @@ const Comment = (props) => {
         <div className="tweetBox">
           <form>
             <div className="tweetBox__input">
-              <Avatar src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg" />
+              <Avatar
+                name="T"
+                size="50"
+                round={true}
+                colors={["blue","red"]}
+              />
+              {/* <img url="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg" /> */}
               <input
                 value={text}
                 placeholder="Tweet your reply"

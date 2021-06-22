@@ -1,23 +1,23 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
+import Avatar from "react-avatar";
 import { Card, Button } from "react-bootstrap";
 import Like from "../../container/Like";
 import { useLocation } from "react-router-dom";
-import Comment from "./commentbox"
-import ShareIcon from "@material-ui/icons/Share";
+import Comment from "./commentbox";
+import Retweet from "../../container/Retweet"
 import axios from "axios";
-
 import NavBar from "../../container/searchbar";
 import Tweetbox from "../../container/tweetbox";
-import { Avatar } from "@material-ui/core";
+
 import "./home.css";
 const Home = (props) => {
   const [tweets, settweets] = useState("");
   // const [mytTweets, setmyTweets] = useState("");
   const location = useLocation();
   useEffect(async () => {
-    console.log("shubhangi")
+    console.log("shubhangi");
     const response = await axios.get("http://localhost:7000/api/alltweet", {
       headers: {
         "x-auth-token": localStorage.getItem("login"),
@@ -54,29 +54,49 @@ const Home = (props) => {
                     marginLeft: "auto",
                   }}
                 >
-                  <div className="row d-flex">
+                  <div className="col d-flex">
                     <Avatar
-                      src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-                      style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+                      name={tweet.user.fullname}
+                      size="50"
+                      round={true}
+                      colors={['red', 'green', 'blue']}
                     />
                     <div className="data">
-                      <b>{tweet.user.fullname}</b>@{tweet.user.username}
-                      <span> </span>
-                      {createdAt}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                        <span> </span>
+                        {createdAt}
+                      </div>
+                      <div
+                        style={{
+                          marginBottom: "3%",
+                          // display: "flex",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        {tweet.text}
+                      </div>
                     </div>
                   </div>
-                  <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                   <div className="col d-flex">
                     <div className="rowdata">
                       <Like data={tweet} />
                     </div>
                     <div className="rowdata">
-                      <Comment data={tweet} />
-                      {tweet.replaytotweetCount}
+                      <div className="col d-flex">
+                        <Comment data={tweet} />
+                        {tweet.replaytotweetCount}
+                      </div>
                     </div>
                     <div className="rowdata">
-                      <ShareIcon  />
-                      {tweet.retweetCount}
+                      <Retweet data={tweet} />
                     </div>
                   </div>
                 </Card>

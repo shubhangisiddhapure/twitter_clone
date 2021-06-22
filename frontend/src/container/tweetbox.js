@@ -1,9 +1,8 @@
 /** @format */
 
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar,Button } from "@material-ui/core";
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
-
 import "./tweetbox.css";
 import axios from "axios";
 function TweetBox() {
@@ -37,6 +36,7 @@ function TweetBox() {
         <div className="tweetBox">
           <form>
             <div className="tweetBox__input">
+              
               <Avatar src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg" />
               <input
                 value={text}

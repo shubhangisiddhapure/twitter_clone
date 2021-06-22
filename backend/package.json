@@ -8,15 +8,18 @@
     "config": "^3.3.6",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-validator": "^6.11.1",
+    "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
-    "mongoose": "^5.12.13",
+    "mongoose": "^5.12.14",
     "mongoose-unique-validator": "^2.0.3",
-    "nodemon": "^2.0.7"
+    "nodemailer": "^6.6.2",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^2.0.7",
+    "smtp": "^0.1.4"
   },
   "devDependencies": {
-    "eslint": "^7.28.0",
+    "eslint": "^7.29.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4"
   },

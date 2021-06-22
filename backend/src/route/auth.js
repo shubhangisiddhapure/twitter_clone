@@ -3,13 +3,24 @@
 const express = require("express");
 const User = require("../model/user.js");
 const jwt = require("jsonwebtoken");
-const bycrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const { check, validationResult } = require("express-validator/check");
 const process = require("process");
 const jwtToken = process.env.jwtSecret;
+const apiKey = process.env.SENDGRIDSECRT;
 
 const router = express.Router();
+const nodemailer = require("nodemailer");
+const sendgridTransort = require("nodemailer-sendgrid-transport");
 
+const transporter = nodemailer.createTransport(
+  sendgridTransort({
+    auth: {
+      api_key: apiKey,
+    },
+  })
+);
 //post api/aut
 // autthenticate user & get token
 
@@ -46,8 +57,8 @@ router.post(
           .json({ errors: [{ msg: "User alearday exite" }] });
       }
       // Create
-      const salt = await bycrypt.genSalt(10);
-      profileFields.password = await bycrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt(10);
+      profileFields.password = await bcrypt.hash(password, salt);
       profile = new User(profileFields);
       await profile.save();
       //return jsonwebtoken
@@ -89,7 +100,7 @@ router.post(
           .json({ errors: [{ msg: "invalid credentials" }] });
       }
 
-      const isMatch = await bycrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
         return res
@@ -107,6 +118,93 @@ router.post(
         if (err) throw err;
         res.json({ token});
       });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("server error");
+    }
+  }
+);
+
+
+// forget Password;
+router.post(
+  "/resetPassword",
+  [
+    check("email", "please enter a valid email")
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors });
+    }
+    try {
+      crypto.randomBytes(32, async (err, buffer) => {
+        if (err) {
+          console.log(err);
+        }
+        const token = buffer.toString("hex");
+        // console.log(buffer);
+        const user = await User.findOne({ email: req.body.email });
+        // console.log(user);
+        if (!user) {
+          return res
+            .status(500)
+            .json({ error: "user dont exist with that email" });
+        }
+        user.resetToken = token;
+        user.expireToken = Date.now() + 360000;
+        const result = await user.save();
+        if (result) {
+          transporter.sendMail({
+            to: user.email,
+            from: "siddhapureshubhangi@gmail.com",
+            subject: "Password Reset",
+            html: `
+            <p> you requested for password reset</p>
+            <h5>click on this <a href = "http://localhost:3000/${token}">link</a> to reset the password
+            `
+          });
+          res.json({ messege: "check your email", token });
+      }
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("server error");
+    }
+  }
+);
+//new password API
+router.post(
+  "/newPassword",
+  [
+    check("password", "please enter a password")
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors });
+    }
+    try {
+      const newPassword = req.body.password;
+      const sentToken = req.body.token;
+      console.log(sentToken);
+      const user = await User.findOne({ resetToken: sentToken });
+      // console.log(user);
+      if (!user) {
+        return res.status(500).json({ error: "try again session expired" });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+      user.resetToken = undefined;
+      user.expireToken = undefined;
+      const savedUser = await user.save();
+      if (savedUser) {
+        res.json({ message: "password updated success" });
+      }
     } catch (err) {
       console.log(err);
       res.status(500).send("server error");

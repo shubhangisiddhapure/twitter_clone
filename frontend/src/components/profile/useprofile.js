@@ -1,13 +1,15 @@
 /** @format */
 
-import { Avatar } from "@material-ui/core";
+
 import React, { useState, useEffect } from "react";
+import Avatar from "react-avatar";
 import { Card } from "react-bootstrap";
 import axios from "axios";
+import Retweet from "../../container/Retweet";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Navbar from "../../container/Navbars";
-import Comment from "./userprofilecomment"
+import Comment from "./userprofilecomment";
 import Like from "../../container/Like";
 import "./profile.css";
 var jwt = require("jsonwebtoken");
@@ -189,29 +191,48 @@ const Userprofile = (props) => {
                     marginLeft: "auto",
                   }}
                 >
-                  <div className="row d-flex">
+                  <div className="col d-flex">
                     <Avatar
-                      src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-                      style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+                      name={tweet.user.fullname}
+                      size="50"
+                      round={true}
+                      colors={["red", "green", "blue"]}
                     />
                     <div className="data">
-                      <b>{profile.fullname}</b>@{profile.username}
-                      <span> </span>
-                      {createdAt}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        <b>{profile.fullname}</b>@{profile.username}
+                        <span> </span>
+                        {createdAt}
+                      </div>
+                      <div
+                        style={{
+                          marginBottom: "3%",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        {tweet.text}
+                      </div>
                     </div>
                   </div>
-                  <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                   <div className="col d-flex">
                     <div className="rowdata">
                       <Like data={tweet} />
                     </div>
                     <div className="rowdata">
-                      <Comment data={tweet} />
-                      {tweet.replaytotweetCount}
+                      <div className="col d-flex">
+                        <Comment data={tweet} />
+                        {tweet.replaytotweetCount}
+                      </div>
                     </div>
                     <div className="rowdata">
-                      <h5>Retweet</h5>
-                      {tweet.retweetCount}
+                      <Retweet data={tweet} />
                     </div>
                   </div>
                 </Card>

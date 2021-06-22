@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useLocation, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
+import ShareIcon from "@material-ui/icons/Share";
 import LikeButton from "@material-ui/icons/FavoriteTwoTone";
 import Comments from "@material-ui/icons/ChatBubbleOutline";
-import { Avatar } from "@material-ui/core";
+// import { Avatar } from "@material-ui/core";
+import Avatar from "react-avatar";
 import "../components/Home/home.css";
 const Postcomment = (props) => {
   const [commentbox, setcommentbox] = useState("");
@@ -46,27 +48,45 @@ const Postcomment = (props) => {
                   marginLeft: "auto",
                 }}
               >
-                <div className="row d-flex">
+                <div className="col d-flex">
                   <Avatar
-                    src="https://pbs.twimg.com/profile_images/1266938830608875520/f-eajIjB_400x400.jpg"
-                    style={{ width: "8%", height: "5%", marginLeft: "2%" }}
+                    name={tweet.user.fullname}
+                    size="50"
+                    round={true}
+                    colors={["red", "green", "blue"]}
                   />
                   <div className="data">
-                    <b>{tweet.user.fullname}</b>@{tweet.user.username}
-                    <span> </span>
-                    {createdAt}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "left",
+                        justifyContent: "left",
+                      }}
+                    >
+                      <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                      <span> </span>
+                      {createdAt}
+                    </div>
+                    <div
+                      style={{
+                        marginBottom: "3%",
+                        alignItems: "left",
+                        justifyContent: "left",
+                      }}
+                    >
+                      {tweet.text}
+                    </div>
                   </div>
                 </div>
-                <div style={{ marginBottom: "3%" }}>{tweet.text}</div>
                 <div className="col d-flex">
                   <div className="rowdata">
                     <LikeButton />
                   </div>
                   <div className="rowdata">
-                    <Comments/>
+                    <Comments />
                   </div>
                   <div className="rowdata">
-                    <h5>Retweet</h5>
+                    <ShareIcon />
                   </div>
                 </div>
               </Card>
