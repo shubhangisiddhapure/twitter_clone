@@ -14,7 +14,7 @@ import Tweetbox from "../../container/tweetbox";
 import "./home.css";
 const Home = (props) => {
   const [tweets, settweets] = useState("");
-  // const [mytTweets, setmyTweets] = useState("");
+   const [myTweets, setmyTweets] = useState("");
   const location = useLocation();
   useEffect(async () => {
     console.log("shubhangi");
@@ -23,9 +23,9 @@ const Home = (props) => {
         "x-auth-token": localStorage.getItem("login"),
       },
     });
-    settweets(response.data.data);
-    // setmyTweets(response.data.MyTweets);
-    console.log(response.data.data);
+    settweets(response.data.data.alltweets);
+    setmyTweets(response.data.data.allretweet);
+    console.log(myTweets);
   }, []);
 
   return (
@@ -34,6 +34,57 @@ const Home = (props) => {
       <div>
         <br></br>
         <Tweetbox />
+        {myTweets.length > 0 && myTweets.map(tweet => {
+          const name = myTweets[0].fullname
+         
+          return (
+            <Card
+              className="shadow p-3 mb-2 bg-white rounded"
+              style={{
+                width: "50%",
+                marginRight: "auto",
+                marginLeft: "auto",
+              }}
+            >
+              <span style={{ marginRight: "auto",marginBottom:"1%" }}>
+                You retweeted tweet of <b>@{tweet.userName}</b>
+              </span>
+              <div className="col d-flex">
+                <Avatar
+                  name={tweet.fullname[0]}
+                  size="50"
+                  round={true}
+                  colors={["red", "green", "blue"]}
+                />
+                <div className="data">
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "left",
+                      justifyContent: "left",
+                    }}
+                  >
+                    <b>{tweet.fullname}</b>@{tweet.userName}
+                    <span> </span>
+                    {new Date(tweet.createdAt).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                    })}
+                  </div>
+                  <div
+                    style={{
+                      marginBottom: "3%",
+                      alignItems: "left",
+                      justifyContent: "left",
+                    }}
+                  >
+                    {tweet.text}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          );
+        })}
         {tweets &&
           tweets.map((tweet, index) => {
             // console.log(tweet);
@@ -59,7 +110,7 @@ const Home = (props) => {
                       name={tweet.user.fullname}
                       size="50"
                       round={true}
-                      colors={['red', 'green', 'blue']}
+                      colors={["red", "green", "blue"]}
                     />
                     <div className="data">
                       <div

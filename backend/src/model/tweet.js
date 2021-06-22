@@ -49,7 +49,39 @@ const Tweetchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  
+  reTweet: {
+    userid: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    userName: [
+      {
+        type: String,
+      },
+    ],
+    fullname: [
+      {
+        type: String,
+      },
+    ],
+    text: [
+      {
+        type: String,
+      },
+    ],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  // tweet: [
+  //   {
+  //     type: mongoose.Schema.ObjectId,
+  //     ref: "Tweet",
+  //   },
+  // ],
 });
 
 module.exports = mongoose.model("Tweet", Tweetchema);
