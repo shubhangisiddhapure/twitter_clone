@@ -1,8 +1,9 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Navbar, Nav, Form, FormControl, Button, Card } from "react-bootstrap";
 import axios from "axios";
+import Avatar from "react-avatar";
 import { useHistory } from "react-router-dom";
 const NavBar = () => {
   const history = useHistory("");
@@ -38,7 +39,6 @@ const NavBar = () => {
     //       state: { data:profile.data.data },
     //     });
     //     return true;
-
     //   }
   };
   const onChangeHandler = (text) => {
@@ -60,11 +60,11 @@ const NavBar = () => {
           <Nav.Link href="/profile">My Profile</Nav.Link>
         </Nav>
         <Nav className="index mr-auto">
-          <Form>
-            <FormControl
+          <div>
+            <input
               type="text"
               placeholder="Search"
-              className="mr-sm-2"
+              className="searchbox mr-sm-2"
               value={text}
               onChange={(e) => onChangeHandler(e.target.value)}
               //  onBlur={()=>{
@@ -73,17 +73,26 @@ const NavBar = () => {
               //    },100)
               //  }}
             />
-            {suggestions &&
+              {suggestions &&
               suggestions.map((suggestion, i) => (
-                <div
-                  key={i}
-                  className="suggestion mr-sm-2"
-                  onClick={() => onSuggestHandler(suggestion.username)}
-                >
-                  {suggestion.username}
-                </div>
-              ))}
-          </Form>
+                  <Card>
+                  <div
+                    key={i}
+                    className="suggestion mr-sm-2"
+                    onClick={() => onSuggestHandler(suggestion.username)}
+                  >
+                    <Avatar
+                      name={suggestion.username}
+                      size="30"
+                      round={true}
+                      colors={["red", "green", "blue"]}
+                    />{" "}
+                    {suggestion.username}
+                  </div>
+                  </Card>
+                ))}
+          
+          </div>
         </Nav>
         <Nav className=" ml-auto">
           <Nav.Link href="/">Logout</Nav.Link>

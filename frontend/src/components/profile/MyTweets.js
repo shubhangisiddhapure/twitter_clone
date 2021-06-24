@@ -11,9 +11,7 @@ import Like from "../../container/Like";
 import Avatar from "react-avatar";
 import "../../components/Home/home.css";
 const MyTweets = (props) => {
-  console.log("tweetbox");
   const [tweetbox, settweetbox] = useState("");
-  console.log(localStorage.getItem("login"));
   const location = useLocation();
   useEffect(async () => {
     const response = await axios.get("http://localhost:7000/api/myTweet", {
@@ -23,7 +21,7 @@ const MyTweets = (props) => {
     });
     if (response) {
       settweetbox(response.data.data);
-      console.log(tweetbox);
+
     }
   }, []);
 
@@ -38,8 +36,68 @@ const MyTweets = (props) => {
               month: "short",
             }
           );
-          return (
-            <div>
+          if (tweet._id) {
+            return (
+              <div>
+                <Card
+                  className="shadow p-3 mb-2 bg-white rounded"
+                  style={{
+                    width: "50%",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
+                >
+                  <div className="col d-flex">
+                    <Avatar
+                      name={tweet.user.fullname}
+                      size="50"
+                      round={true}
+                      colors={["red", "green", "blue"]}
+                    />
+                    <div className="data">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                        <span> </span>
+                        {createdAt}
+                      </div>
+                      <div
+                        style={{
+                          marginBottom: "3%",
+                          alignItems: "left",
+                          justifyContent: "left",
+                        }}
+                      >
+                        {tweet.text}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col d-flex">
+                    <div className="rowdata">
+                      <Like data={tweet} />
+                    </div>
+                    <div className="rowdata">
+                      <div className="col d-flex">
+                        <Profilecomment data={tweet} />
+                        {tweet.replaytotweetCount}
+                      </div>
+                    </div>
+                    <div className="rowdata">
+                      <Retweet data={tweet} />
+                      {/* {tweet.retweetCount} */}
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            );
+          }
+          else {
+            return (
               <Card
                 className="shadow p-3 mb-2 bg-white rounded"
                 style={{
@@ -48,9 +106,12 @@ const MyTweets = (props) => {
                   marginLeft: "auto",
                 }}
               >
+                <span style={{ marginRight: "auto", marginBottom: "1%" }}>
+                 You retweeted tweet of <b>@{tweet.userName}</b>
+                </span>
                 <div className="col d-flex">
                   <Avatar
-                    name={tweet.user.fullname}
+                    name={tweet.fullname[0]}
                     size="50"
                     round={true}
                     colors={["red", "green", "blue"]}
@@ -63,9 +124,12 @@ const MyTweets = (props) => {
                         justifyContent: "left",
                       }}
                     >
-                      <b>{tweet.user.fullname}</b>@{tweet.user.username}
+                      <b>{tweet.fullname}</b>@{tweet.userName}
                       <span> </span>
-                      {createdAt}
+                      {new Date(tweet.createdAt).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                      })}
                     </div>
                     <div
                       style={{
@@ -78,24 +142,9 @@ const MyTweets = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="col d-flex">
-                  <div className="rowdata">
-                    <Like data={tweet} />
-                  </div>
-                  <div className="rowdata">
-                    <div className="col d-flex">
-                      <Profilecomment data={tweet} />
-                      {tweet.replaytotweetCount}
-                    </div>
-                  </div>
-                  <div className="rowdata">
-                    <Retweet data={tweet} />
-                    {/* {tweet.retweetCount} */}
-                  </div>
-                </div>
               </Card>
-            </div>
-          );
+            );
+          }
         })}
     </div>
   );

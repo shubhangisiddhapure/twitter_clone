@@ -18,7 +18,7 @@ const Comment = (props) => {
   const [error, seterror] = useState("");
   const [tweet, settweet] = useState("");
   let { id } = useParams();
-  console.log(id, "comment file");
+
 
   useEffect(async () => {
     const response = await axios.post(

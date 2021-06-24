@@ -39,29 +39,33 @@ router.post(
 router.get("/alltweet", auth, async (req, res) => {
   try {
     const alltweets = [];
-    const allretweet=[]
     const userid = req.user.id;
+    //  const tweets = await Tweet.find({user:userid}).sort("-createdAt").populate("user");
     const tweets = await Tweet.find().sort("-createdAt").populate("user");
+
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
     for (let i = 0; i < tweets.length; i++) {
+      // const retweetid = tweets[i].reTweet.userid;
+      // if (retweetid.includes(userid)) {
+      //   alltweets.push(tweets[i].reTweet);
+      // }
       if (tweets[i].user.id === userid) {
         alltweets.push(tweets[i]);
-      }
-      const retweetid = tweets[i].reTweet.userid;
-      if (retweetid.includes(userid)) {
-        allretweet.push(tweets[i].reTweet);
-        console.log(tweets[i].reTweet);
       }
       const followrid = tweets[i].user.followers;
       if (followrid.includes(userid)) {
         alltweets.push(tweets[i]);
       }
+      if (tweets[i].reTweet.userid.length > 0) {
+        alltweets.push(tweets[i].reTweet);
+      }
     }
-    return res
-      .status(200)
-      .json({ msg: "All tweets", data: { alltweets, allretweet } });
+    alltweets.sort(function (a, b) {
+      return a.createdAt < b.createdAt;
+    });
+    return res.status(200).json({ msg: "All tweets", data: { alltweets } });
   } catch (err) {
     console.log(err);
     return res.status(500).send("sever error");
@@ -152,15 +156,17 @@ router.get("/myTweet", auth, async (req, res) => {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
     for (let i = 0; i < tweets.length; i++) {
+      const retweetid = tweets[i].reTweet.userid;
+      if (retweetid.includes(userid)) {
+        alltweets.push(tweets[i].reTweet);
+      }
       if (tweets[i].user.id === userid) {
         alltweets.push(tweets[i]);
       }
-      // const retweetid = tweets[i].retweets;
-      // console.log(retweetid);
-      // if (retweetid.includes(userid)) {
-      //   alltweets.push(tweets[i]);
-      // }
     }
+    alltweets.sort(function (a, b) {
+      return a.createdAt < b.createdAt;
+    });
     return res.status(200).json({ msg: "All tweets", data: alltweets });
   } catch (err) {
     console.log(err);
@@ -192,14 +198,17 @@ router.put("/reTweet", auth, async (req, res) => {
     if (tweet.retweets.includes(req.user.id)) {
       return res.status(400).json({ message: "you alearday retweeted " });
     }
+    const user = await User.findById(req.user.id);
+    console.log(user.username, "retweetUserName");
     tweet.retweets.push(req.user.id);
     tweet.retweetCount = tweet.retweetCount + 1;
     tweet.reTweet.userid.push(req.user.id);
+    tweet.reTweet.retweetUserName.push(user.username);
     tweet.reTweet.userName.push(tweet.user.username);
     tweet.reTweet.fullname.push(tweet.user.fullname);
-     tweet.reTweet.text.push(tweet.text);
+    tweet.reTweet.text.push(tweet.text);
+    tweet.reTweet.createdAt = Date.now();
     await tweet.save();
-    //  console.log(tweet);
     await User.findByIdAndUpdate(req.user.id, {
       $push: { tweets: tweet._id },
       $inc: { tweetsCount: 1 },
@@ -217,15 +226,18 @@ router.put("/undoRetweet", auth, async (req, res) => {
     if (!tweet) {
       return res.status(404).json({ msg: "tweet not found" });
     }
+    const user = await User.findById(req.user.id);
+    // console.log(user.username)
     if (tweet.retweets.includes(req.user.id)) {
       const index = tweet.retweets.indexOf(req.user.id);
       tweet.retweets.splice(index, 1);
       tweet.retweetCount = tweet.retweetCount - 1;
+      tweet.reTweet.retweetUserName.pull(user.username);
       tweet.reTweet.userid.pull(req.user.id);
       tweet.reTweet.userName.pull(tweet.user.username);
       tweet.reTweet.fullname.pull(tweet.user.fullname);
-       tweet.reTweet.text.pull(tweet.text);
-      // tweet.reTweet.tweet.pull(req.body.id);
+      tweet.reTweet.text.pull(tweet.text);
+
       await tweet.save();
       //  console.log(tweet);
       await User.findByIdAndUpdate(req.user.id, {
@@ -242,20 +254,27 @@ router.put("/undoRetweet", auth, async (req, res) => {
 
 //getting all tweets of a searcha user
 router.post("/usertweet", async (req, res) => {
-  const user = req.body.id;
-  // console.log(userid)
   try {
-    const tweets = await Tweet.find({ user }).sort("-createdAt").populate({
-      path: "user",
-      select: "username avatar fullname",
-    });
-    // console.log(tweets);
-    if (!tweets) {
-      res.status(400).json({ msg: "tweets not found" });
-    } else {
-      res.status(200).json({ tweets });
+    const alltweets = [];
+    const userid = req.body.id;
+    const tweets = await Tweet.find().sort("-createdAt").populate("user");
+    if (tweets.length === 0) {
+      return res.status(404).json({ msg: "All Tweets not found" });
     }
+    for (let i = 0; i < tweets.length; i++) {
+      if (tweets[i].user.id === userid) {
+        alltweets.push(tweets[i]);
+      }
+       if (tweets[i].reTweet.userid.length > 0) {
+         alltweets.push(tweets[i].reTweet);
+       }
+    }
+    alltweets.sort(function (a, b) {
+      return a.createdAt < b.createdAt;
+    });
+    return res.status(200).json({ msg: "All tweets", data: alltweets });
   } catch (err) {
+    console.log(err);
     res.status(500).send("Server Error");
   }
 });

@@ -56,6 +56,11 @@ const Tweetchema = new mongoose.Schema({
         ref: "User",
       },
     ],
+    retweetUserName: [
+      {
+        type: String,
+      },
+    ],
     userName: [
       {
         type: String,

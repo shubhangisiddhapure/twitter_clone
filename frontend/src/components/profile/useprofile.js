@@ -1,6 +1,5 @@
 /** @format */
 
-
 import React, { useState, useEffect } from "react";
 import Avatar from "react-avatar";
 import { Card } from "react-bootstrap";
@@ -52,7 +51,7 @@ const Userprofile = (props) => {
       { id }
     );
     console.log(profiletweet.data.tweets);
-    setAlltweets(profiletweet.data.tweets);
+    setAlltweets(profiletweet.data.data);
   }, [location]);
 
   const Follow = async (e) => {
@@ -177,12 +176,70 @@ const Userprofile = (props) => {
                 month: "short",
               }
             );
-            if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
-              const success = true;
-              localStorage.setItem("sucess", success);
-            }
-            return (
-              <div>
+            // if (JSON.stringify(tweet.likes[index]) === JSON.stringify(userid)) {
+            //   const success = true;
+            //   localStorage.setItem("sucess", success);
+            // }
+            if (tweet._id) {
+              return (
+                <div>
+                  <Card
+                    className="shadow p-3 mb-2 bg-white rounded"
+                    style={{
+                      width: "50%",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    <div className="col d-flex">
+                      <Avatar
+                        name={tweet.user.fullname}
+                        size="50"
+                        round={true}
+                        colors={["red", "green", "blue"]}
+                      />
+                      <div className="data">
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "left",
+                            justifyContent: "left",
+                          }}
+                        >
+                          <b>{profile.fullname}</b>@{profile.username}
+                          <span> </span>
+                          {createdAt}
+                        </div>
+                        <div
+                          style={{
+                            marginBottom: "3%",
+                            alignItems: "left",
+                            justifyContent: "left",
+                          }}
+                        >
+                          {tweet.text}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col d-flex">
+                      <div className="rowdata">
+                        <Like data={tweet} />
+                      </div>
+                      <div className="rowdata">
+                        <div className="col d-flex">
+                          <Comment data={tweet} />
+                          {tweet.replaytotweetCount}
+                        </div>
+                      </div>
+                      <div className="rowdata">
+                        <Retweet data={tweet} />
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              );
+            } else {
+              return (
                 <Card
                   className="shadow p-3 mb-2 bg-white rounded"
                   style={{
@@ -191,9 +248,14 @@ const Userprofile = (props) => {
                     marginLeft: "auto",
                   }}
                 >
+                  <span style={{ marginRight: "auto", marginBottom: "1%" }}>
+                    {tweet.retweetUserName} retweeted tweet of
+                    <b>@{tweet.userName}</b>
+                  </span>
+
                   <div className="col d-flex">
                     <Avatar
-                      name={tweet.user.fullname}
+                      name={tweet.fullname[0]}
                       size="50"
                       round={true}
                       colors={["red", "green", "blue"]}
@@ -206,9 +268,12 @@ const Userprofile = (props) => {
                           justifyContent: "left",
                         }}
                       >
-                        <b>{profile.fullname}</b>@{profile.username}
+                        <b>{tweet.fullname}</b>@{tweet.userName}
                         <span> </span>
-                        {createdAt}
+                        {new Date(tweet.createdAt).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                        })}
                       </div>
                       <div
                         style={{
@@ -221,23 +286,9 @@ const Userprofile = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col d-flex">
-                    <div className="rowdata">
-                      <Like data={tweet} />
-                    </div>
-                    <div className="rowdata">
-                      <div className="col d-flex">
-                        <Comment data={tweet} />
-                        {tweet.replaytotweetCount}
-                      </div>
-                    </div>
-                    <div className="rowdata">
-                      <Retweet data={tweet} />
-                    </div>
-                  </div>
                 </Card>
-              </div>
-            );
+              );
+            }
           })}
       </div>
     </div>

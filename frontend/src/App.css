@@ -2,14 +2,13 @@
   text-align: center;
 }
 body {
-  --twitter-color: #50b7f5;
-  --twitter-background: #e6ecf0;
+  --twitter-color: #50B7F5;
+  --twitter-background: #E6ECF0;
 }
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -17,13 +16,16 @@ body {
 }
 .index{
   position: absolute;
-  left:75.5%;
+  left:25%;
   height:35px;
 }
-
-
+.searchbox{
+  position: relative;
+  z-index: auto;
+  width: 430% !important;
+}
 .App-header {
-  background-color: #282c34;
+  background-color: #282C34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,11 +34,9 @@ body {
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
 .App-link {
-  color: #61dafb;
+  color: #61DAFB;
 }
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -47,16 +47,16 @@ body {
 }
 .suggestion{
   cursor: pointer;
+  z-index: 1;
   background-color: white;
   border-right: 1px solid  #E6ECF0 ;
   border-left: 1px solid #E6ECF0;
   border-bottom: 1px solid  #E6ECF0;
-  width: 100%;
-  height: 40px;
+  width: 430%;
+  height: 50px;
+  padding: 3%;
+  text-align:justify;
 }
 .suggestion:hover{
   background-color:#e2e7eb;
-}
-.index2{
-  border-radius: 25px;
 }
