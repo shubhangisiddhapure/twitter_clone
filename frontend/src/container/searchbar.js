@@ -73,9 +73,9 @@ const NavBar = () => {
               //    },100)
               //  }}
             />
-              {suggestions &&
+            {suggestions &&
               suggestions.map((suggestion, i) => (
-                  <Card>
+                <Card>
                   <div
                     key={i}
                     className="suggestion mr-sm-2"
@@ -86,12 +86,13 @@ const NavBar = () => {
                       size="30"
                       round={true}
                       colors={["red", "green", "blue"]}
-                    />{" "}
-                    {suggestion.username}
+                    />
+                    <span style={{ marginLeft: "5%" }}>
+                      {suggestion.username}
+                    </span>
                   </div>
-                  </Card>
-                ))}
-          
+                </Card>
+              ))}
           </div>
         </Nav>
         <Nav className=" ml-auto">
