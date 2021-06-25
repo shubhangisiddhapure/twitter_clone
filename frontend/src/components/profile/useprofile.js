@@ -51,7 +51,7 @@ const Userprofile = (props) => {
       { id }
     );
     console.log(profiletweet.data.tweets);
-    setAlltweets(profiletweet.data.data);
+    setAlltweets(profiletweet.data.data.alltweets);
   }, [location]);
 
   const Follow = async (e) => {

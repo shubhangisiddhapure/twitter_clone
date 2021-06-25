@@ -24,7 +24,6 @@ const MyTweets = (props) => {
 
     }
   }, []);
-
   return (
     <div>
       {tweetbox &&

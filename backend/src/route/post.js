@@ -8,6 +8,7 @@ const auth = require("../middleware/auth.js");
 const User = require("../model/user.js");
 const Tweet = require("../model/tweet.js");
 const Comment = require("../model/comment.js");
+const { find } = require("../model/user.js");
 //create a tweet
 router.post(
   "/tweet",
@@ -39,32 +40,33 @@ router.post(
 router.get("/alltweet", auth, async (req, res) => {
   try {
     const alltweets = [];
+    const userId = [];
     const userid = req.user.id;
-    //  const tweets = await Tweet.find({user:userid}).sort("-createdAt").populate("user");
-    const tweets = await Tweet.find().sort("-createdAt").populate("user");
-
+    const user = await User.find({ followers: { $in: userid } });
+    user.map((userid) => {
+      userId.push(userid._id);
+    });
+    const tweets = await Tweet.find({
+      $or: [
+        { user: userid },
+        { user: { $in: userId } },
+        { "reTweet.userid": { $in: userid } },
+      ],
+    })
+      .sort("-createdAt")
+      .populate("user");
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
+
     for (let i = 0; i < tweets.length; i++) {
-      // const retweetid = tweets[i].reTweet.userid;
-      // if (retweetid.includes(userid)) {
-      //   alltweets.push(tweets[i].reTweet);
-      // }
-      if (tweets[i].user.id === userid) {
-        alltweets.push(tweets[i]);
-      }
-      const followrid = tweets[i].user.followers;
-      if (followrid.includes(userid)) {
-        alltweets.push(tweets[i]);
-      }
       if (tweets[i].reTweet.userid.length > 0) {
         alltweets.push(tweets[i].reTweet);
+        console.log(tweets[i].reTweet.createdAt);
       }
+      alltweets.push(tweets[i]);
     }
-    alltweets.sort(function (a, b) {
-      return a.createdAt < b.createdAt;
-    });
+    alltweets.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     return res.status(200).json({ msg: "All tweets", data: { alltweets } });
   } catch (err) {
     console.log(err);
@@ -151,22 +153,23 @@ router.get("/myTweet", auth, async (req, res) => {
   try {
     const alltweets = [];
     const userid = req.user.id;
-    const tweets = await Tweet.find().sort("-createdAt").populate("user");
+    const tweets = await Tweet.find({
+      $or: [{ user: userid }, { "reTweet.userid": { $in: userid } }],
+    })
+      .sort("-createdAt")
+      .populate("user");
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
     for (let i = 0; i < tweets.length; i++) {
-      const retweetid = tweets[i].reTweet.userid;
-      if (retweetid.includes(userid)) {
+      if (tweets[i].reTweet.userid.length > 0) {
         alltweets.push(tweets[i].reTweet);
       }
       if (tweets[i].user.id === userid) {
         alltweets.push(tweets[i]);
       }
     }
-    alltweets.sort(function (a, b) {
-      return a.createdAt < b.createdAt;
-    });
+    alltweets.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     return res.status(200).json({ msg: "All tweets", data: alltweets });
   } catch (err) {
     console.log(err);
@@ -257,22 +260,24 @@ router.post("/usertweet", async (req, res) => {
   try {
     const alltweets = [];
     const userid = req.body.id;
-    const tweets = await Tweet.find().sort("-createdAt").populate("user");
+    const tweets = await Tweet.find({
+      $or: [{ user: userid }, { "reTweet.userid": { $in: userid } }],
+    })
+      .sort("-createdAt")
+      .populate("user");
     if (tweets.length === 0) {
       return res.status(404).json({ msg: "All Tweets not found" });
     }
     for (let i = 0; i < tweets.length; i++) {
+      if (tweets[i].reTweet.userid.length > 0) {
+        alltweets.push(tweets[i].reTweet);
+      }
       if (tweets[i].user.id === userid) {
         alltweets.push(tweets[i]);
       }
-       if (tweets[i].reTweet.userid.length > 0) {
-         alltweets.push(tweets[i].reTweet);
-       }
     }
-    alltweets.sort(function (a, b) {
-      return a.createdAt < b.createdAt;
-    });
-    return res.status(200).json({ msg: "All tweets", data: alltweets });
+    alltweets.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    return res.status(200).json({ msg: "All tweets", data: { alltweets } });
   } catch (err) {
     console.log(err);
     res.status(500).send("Server Error");
