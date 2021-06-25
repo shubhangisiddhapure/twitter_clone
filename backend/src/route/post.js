@@ -62,7 +62,6 @@ router.get("/alltweet", auth, async (req, res) => {
     for (let i = 0; i < tweets.length; i++) {
       if (tweets[i].reTweet.userid.length > 0) {
         alltweets.push(tweets[i].reTweet);
-        console.log(tweets[i].reTweet.createdAt);
       }
       alltweets.push(tweets[i]);
     }
