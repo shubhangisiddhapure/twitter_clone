@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./src/config/db.js");
 const bodyParser = require("body-parser");
 
+const path = require("path")
 app = express();
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
