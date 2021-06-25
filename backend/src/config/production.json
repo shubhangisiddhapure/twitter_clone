@@ -1,0 +1,5 @@
+{
+  "jwtSecret": "mysecrettoken",
+  "MONGOOURI": "mongodb+srv://shubhangi:twitterclone@cluster0.ujnyl.mongodb.net/myFirstDatabase?retryWrites=true",
+  "SENDGRIDSECRT": "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"
+}
